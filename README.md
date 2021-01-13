@@ -4,8 +4,8 @@ eMondrian is a distribution of the Mondrian (R)OLAP engine version.
 The main feature of this version is support of ADOMD.NET and Excel clients.
 
 ## Deployment
-1. Download *dist/eMondrian.war* file.
-2. Copy *eMondrian.war* file to *webapps* directory of your java server (Apache Tomcat, Jetty, Tiny Java Web Server).
+1. Download *dist/emondrian.war* file.
+2. Copy *emondrian.war* file to *webapps* directory of your java server (Apache Tomcat, Jetty, Tiny Java Web Server).
 
 ## RanetMondrian contains: 
 - eMondrian Binaries
@@ -16,18 +16,18 @@ The main feature of this version is support of ADOMD.NET and Excel clients.
 On Excel **DATA** tab select **From Other Sources** item and then select **From Analysis Services**.
 Enter
 
-*http://<your_server_address>:8080/eMondrian/xmla* 
+*http://<your_server_address>:8080/emondrian/xmla* 
 
 as **Server name**.
 For example,
 
-*http://localhost:8080/eMondrian/xmla*
+*http://localhost:8080/emondrian/xmla*
 
 ## Connect ADOMD.Net application to Mondrian Cube
 To connect to mondrian from ADOMD.Net application you must use folowing connection string:
 
-*Data Source=http://<your_server_address>:8080/eMondrian/xmla;*
+*Data Source=http://<your_server_address>:8080/emondrian/xmla;*
 
 For example:
 
-*Data Source=http://localhost:8080/eMondrian/xmla;* 
+*Data Source=http://localhost:8080/emondrian/xmla;* 
