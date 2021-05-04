@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+
+  http://mondrian.pentaho.com/documentation/installation.php#5_1_Describe_the_data_sources_in_datasources.xml
+  
+-->
+<DataSources>
+  <DataSource>
+    <DataSourceName>Foodmart</DataSourceName>
+    <DataSourceDescription>Foodmart Sample Data</DataSourceDescription>
+    <URL>http://localhost:8080/emondrian/xmla</URL>
+    <DataSourceInfo>Provider=mondrian;Jdbc=jdbc:hsqldb:res:/hsqldb-foodmart/foodmart;JdbcDrivers=org.hsqldb.jdbc.JDBCDriver</DataSourceInfo>
+    <ProviderName>Mondrian</ProviderName>
+    <ProviderType>MDP</ProviderType>
+    <AuthenticationMode>Unauthenticated</AuthenticationMode>
+    <Catalogs>
+        <Catalog name="FoodMart">
+            <Definition>/WEB-INF/schema/Foodmart.xml</Definition>
+        </Catalog>
+    </Catalogs>
+  </DataSource>
+</DataSources>
