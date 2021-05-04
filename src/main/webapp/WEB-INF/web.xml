@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<web-app 
+  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+  version="3.1"
+  metadata-complete="true"
+>
+
+  <display-name>emondrian</display-name>
+  <description>
+     Mondrian XML/A servlet, sample schemas and datasets, and client libraries and tools.
+  </description>
+    
+  <servlet>
+    <servlet-name>MondrianXmlaServlet</servlet-name>
+    <description>
+      MondrianXmlaServlet. 
+      Provides a XML/A (XML for Analysis) interface to the Mondrian (R)OLAP engine.
+    </description>
+
+    <!--
+
+      These are other classes that implement a XML/A provider servelt on top of Mondrian.
+
+      <servlet-class>mondrian.xmla.impl.Olap4jXmlaServlet</servlet-class>
+      <servlet-class>mondrian.xmla.impl.DynamicDataSourceXmlaServlet</servlet-class>
+
+    -->
+    <servlet-class>mondrian.xmla.impl.MondrianXmlaServlet</servlet-class>
+
+    <init-param>
+      <param-name>CharacterEncoding</param-name>
+      <param-value>UTF-8</param-value>
+    </init-param>
+
+    <!--
+    
+    This parameter is commented out intentionally; 
+    this way, mondrian will assume the default location for the data source configuration
+    The default location is WEB-INF/datasources.xml
+    
+    <init-param>
+      <param-name>DataSourcesConfig</param-name>
+      <param-value>path/to/your/datasources.xml</param-value>
+    </init-param>
+    
+    -->
+    
+    <!--
+      
+
+    <init-param>
+      <param-name>requireAuthenticatedSessions</param-name>
+      <param-value>false</param-value>
+    </init-param>
+
+    -->
+    
+  </servlet>
+    
+  <servlet-mapping>
+    <servlet-name>MondrianXmlaServlet</servlet-name>
+    <url-pattern>/xmla</url-pattern>
+  </servlet-mapping>
+  
+</web-app>
