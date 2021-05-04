@@ -1,0 +1,10 @@
+target
+*/src/generated
+*.ipr
+*.iws
+*.iml
+.project
+.settings
+.classpath
+.idea
+*.json
