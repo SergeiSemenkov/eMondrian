@@ -101,6 +101,53 @@ WHERE "product"."product_class_id" = "product_class"."product_class_id"
       <Level name="Product Name" table="product" column="product_name"
           uniqueMembers="true"/>
     </Hierarchy>
+    <Hierarchy hasAll="true" name="Product Family" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Product Family" table="product_class" column="product_family"
+          uniqueMembers="true"/>
+    </Hierarchy>
+    <Hierarchy hasAll="true" name="Product Department" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Product Department" table="product_class" column="product_department"
+          uniqueMembers="false"/>
+    </Hierarchy>
+    <Hierarchy hasAll="true" name="Product Category" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Product Category" table="product_class" column="product_category"
+          uniqueMembers="false"/>
+    </Hierarchy>
+    <Hierarchy hasAll="true" name="Product Subcategory" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Product Subcategory" table="product_class" column="product_subcategory"
+          uniqueMembers="false"/>
+    </Hierarchy>
+    <Hierarchy hasAll="true" name="Brand Name" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Brand Name" table="product" column="brand_name" uniqueMembers="false"/>
+    </Hierarchy>
+    <Hierarchy hasAll="true" name="Product Name" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
+      <Join leftKey="product_class_id" rightKey="product_class_id">
+        <Table name="product"/>
+        <Table name="product_class"/>
+      </Join>
+      <Level name="Product Name" table="product" column="product_name"
+          uniqueMembers="true"/>
+    </Hierarchy>
   </Dimension>
 
   <Dimension name="Warehouse">
@@ -294,15 +341,16 @@ fullname
   </Dimension>
 
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
-      formatString="Standard"/>
+      formatString="Standard"
+      displayFolder=""/>
   <Measure name="Store Cost" column="store_cost" aggregator="sum"
-      formatString="#,###.00"/>
+      formatString="#,###.00"
+      displayFolder="Store"/>
   <Measure name="Store Sales" column="store_sales" aggregator="sum"
-      formatString="#,###.00" backColor="8421631"/>
+      formatString="#,###.00" 
+      displayFolder="Store"/>
   <Measure name="Sales Count" column="product_id" aggregator="count"
       formatString="#,###"/>
-  <Measure name="Sales Count3" column="product_id" aggregator="count"
-      backColor="Iif(1=1, [Measures].[Sales Count], 8421631)"/> 
   <Measure name="Customer Count" column="customer_id"
       aggregator="distinct-count" formatString="#,###"/>
   <Measure name="Promotion Sales" aggregator="sum" formatString="#,###.00">
@@ -345,15 +393,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       </SQL>
     </MeasureExpression>
   </Measure>
-  
-	<CalculatedMember name="Sales Count With Color" dimension="Measures" formula="[Measures].[Sales Count]">
-	  <CalculatedMemberProperty name="FORMAT_STRING" expression="
-	  Iif(
-	  	[Measures].[Sales Count] &lt; 20000, 
-	  	'$#,##0.00;;;;back_color=8421631;fore_color=0',
-	  	'$#,##0.00;;;;fore_color=8421631'
-	  )"/>
-        </CalculatedMember>
+
         
   <CalculatedMember
       name="Profit"
@@ -375,8 +415,19 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       formula="([Measures].[Profit] - [Measures].[Profit last Period]) / [Measures].[Profit last Period]"
       visible="true"
       caption="Gewinn-Wachstum">
+  </CalculatedMember>
+  <CalculatedMember
+      name="Store Sales / 1000"
+      dimension="Measures"
+      formula="[Measures].[Store Sales] / 1000"
+      visible="true"
+      displayFolder="Store\Calculation"
+      formatString="#,###.00">
     <CalculatedMemberProperty name="FORMAT_STRING" value="0.0%"/>
   </CalculatedMember>
+  <NamedSet name="Top 10 Customers">
+    <Formula>Head(Order([Customers].[Customers].[Name].AllMembers, [Measures].[Profit], DESC), 10)</Formula>
+  </NamedSet>
 </Cube>
 
 <Cube name="Warehouse">
@@ -712,57 +763,6 @@ fullname
       formatString="#,###"/>
   <Measure name="Customer Count" column="customer_id" aggregator="distinct-count"
       formatString="#,###"/>
-</Cube>
-
-<!-- a simpler version of "Sales" (with MEMBER_ORDINAL-properties) -->
-<Cube name="Sales 2">
-   <Table name="sales_fact_1997"/>
-
-   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
-   <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
-
-   <Dimension name="Gender" foreignKey="customer_id">
-     <Hierarchy hasAll="true" allMemberName="All Gender" primaryKey="customer_id">
-       <Table name="customer"/>
-       <Level name="Gender" column="gender" uniqueMembers="true"/>
-     </Hierarchy>
-   </Dimension>
-
-   <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,###">
-     <CalculatedMemberProperty name="MEMBER_ORDINAL" value="1"/>
-   </Measure>
-
-   <Measure name="Unit Sales" column="unit_sales" aggregator="sum"    formatString="Standard">
-     <CalculatedMemberProperty name="MEMBER_ORDINAL" value="2"/>
-   </Measure>
-
-   <Measure name="Store Sales" column="store_sales" aggregator="sum"  formatString="#,###.00">
-      <CalculatedMemberProperty name="MEMBER_ORDINAL" value="3"/>
-    </Measure>
-
-   <Measure name="Store Cost" column="store_cost" aggregator="sum"    formatString="#,###.00">
-      <CalculatedMemberProperty name="MEMBER_ORDINAL" value="6"/>
-    </Measure>
-
-   <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,###">
-      <CalculatedMemberProperty name="MEMBER_ORDINAL" value="7"/>
-    </Measure>
-
-   <CalculatedMember
-       name="Profit"
-       dimension="Measures">
-     <Formula>[Measures].[Store Sales] - [Measures].[Store Cost]</Formula>
-     <CalculatedMemberProperty name="FORMAT_STRING" value="$#,##0.00"/>
-     <CalculatedMemberProperty name="MEMBER_ORDINAL" value="4"/>
-   </CalculatedMember>
-
-   <CalculatedMember
-       name="Profit last Period"
-       dimension="Measures"
-       formula="COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit])"
-       visible="false">
-      <CalculatedMemberProperty name="MEMBER_ORDINAL" value="5"/>
-   </CalculatedMember>
 </Cube>
 
 <VirtualCube name="Warehouse and Sales" defaultMeasure="Store Sales">
