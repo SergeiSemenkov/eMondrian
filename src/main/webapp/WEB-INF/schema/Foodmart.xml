@@ -799,4 +799,16 @@ fullname
   </CalculatedMember>
 </VirtualCube>
 
+<Role name="SampleRole">
+    <SchemaGrant access="none">
+        <CubeGrant cube="Sales" access="all">
+            <DimensionGrant dimension="[Measures]" access="all"/>
+            <HierarchyGrant hierarchy="[Time].[Time]" access="custom" rollupPolicy="partial">
+                <MemberGrant member="[Time].[Time].[1997].[Q4]" access="all"/>
+            </HierarchyGrant>
+            <HierarchyGrant hierarchy="[Gender]" access="none"/>
+        </CubeGrant>
+    </SchemaGrant>
+</Role>
+
 </Schema>
