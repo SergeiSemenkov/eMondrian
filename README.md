@@ -7,7 +7,7 @@ The main feature of this version is support of ADOMD.NET and Excel clients.
 1. Download *dist/emondrian.war* file.
 2. Copy *emondrian.war* file to *webapps* directory of your java server (Apache Tomcat, Jetty, Tiny Java Web Server).
 
-## RanetMondrian contains: 
+## eMondrian contains: 
 - eMondrian Binaries
 - Configuration files to deploy eMondrian to a servlet container (like Tomcat, Jetty, etc.)
 - Sample databases
