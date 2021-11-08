@@ -7,7 +7,7 @@ target
 .settings
 .classpath
 .idea
-*.json
+/src/*.json
 
 
 # Created by .ignore support plugin (hsz.mobi)

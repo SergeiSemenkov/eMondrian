@@ -1,0 +1,28 @@
+{
+  "services": [
+    {
+      "heading": "Build and tune custom eMondrian configuration",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    },
+    {
+      "heading": "Deploy eMondrian server to your environment",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    },
+    {
+      "heading": "Recode eMondrian server behavior by your demands",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    },
+    {
+      "heading": "Design eMondrian schema. Create cubes, dimensions and measures for your database",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    },
+    {
+      "heading": "Set up Role based data access-control",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    },
+    {
+      "heading": "Tune eMondrian instance performance",
+      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+    }
+  ]
+}
