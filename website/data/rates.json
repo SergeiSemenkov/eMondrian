@@ -1,0 +1,12 @@
+{
+  "rates": [
+    {
+      "desc": "Less than 40 hour contract",
+      "rate": 95
+    },
+    {
+      "desc": "40 hours or more contract",
+      "rate": 45
+    }
+  ]
+}
