@@ -3,7 +3,7 @@
     <h2>
       Section is under construction
     </h2>
-    <a href="../">
+    <a href="./..">
       Go back to eMondrian website
     </a>
   </div>
