@@ -8,3 +8,43 @@ target
 .classpath
 .idea
 *.json
+
+
+# Created by .ignore support plugin (hsz.mobi)
+### Node template
+# Logs
+/logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+
+
+
+# Dependency directories
+website/node_modules/
+
+# Optional npm cache directory
+website/.npm
+
+
+# parcel-bundler cache (https://parceljs.org/)
+.cache
+
+# nuxt.js build output
+website/.nuxt
+
+# Nuxt generate
+website/dist
+
+# macOS
+website/.DS_Store
+.DS_Store
+
