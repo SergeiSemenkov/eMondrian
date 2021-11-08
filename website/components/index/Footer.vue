@@ -7,7 +7,7 @@
       <nav class="links">
         <ul>
           <li>
-            <a href="/docs">Documentation</a>
+            <a href="./docs">Documentation</a>
           </li>
           <li>
             <a @click="openMore">About eMondrian</a>
