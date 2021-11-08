@@ -9,8 +9,8 @@
       </div>
       <ul class="header_navigation_buttons">
         <li><a @click="openMore">More</a></li>
-        <li><a href="/consulting">Consulting</a></li>
-        <li><a href="/docs">Documentation</a></li>
+        <li><a href="./consulting">Consulting</a></li>
+        <li><a href="./docs">Documentation</a></li>
         <li><a @click="openQuickStart">Quick start</a></li>
       </ul>
     </nav>

@@ -8,8 +8,8 @@
         <span />
       </div>
       <ul class="header_navigation_buttons">
-        <li><a href="/docs">Documentation</a></li>
-        <li><a href="/">Home</a></li>
+        <li><a href="../docs">Documentation</a></li>
+        <li><a href="../">Home</a></li>
       </ul>
     </nav>
     <div class="container">

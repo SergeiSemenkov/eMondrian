@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="buttons_container">
-      <a href="/docs" class="primary_button">Documentation</a>
+      <a href="./docs" class="primary_button">Documentation</a>
       <a class="secondary_button" @click="openQuickStart">Quick start</a>
     </div>
   </div>

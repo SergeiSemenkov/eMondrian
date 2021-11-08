@@ -38,7 +38,7 @@
         </span>
       </div>
       <div class="item item_7">
-        <a href="/consulting">
+        <a href="./consulting">
           <span>
             More
           </span>
