@@ -1,7 +1,7 @@
 <template>
   <div class="container grid_container">
     <h2 class="title">
-      Connect to Emondrian from your favorite analytical tool
+      Connect to eMondrian from your favorite analytical tool
     </h2>
     <div class="item item_1">
       <img src="../../assets/excel.svg">
