@@ -19,7 +19,7 @@
       </div>
       <div class="item item_3">
         <span>
-          Recode eMondrian server behavior by your demands.
+          Bug Fixing and Changing eMondrian server behavior.
         </span>
       </div>
       <div class="item item_4">

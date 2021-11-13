@@ -8,7 +8,7 @@
             Hi there! My name is Sergei Semenkov
           </h2>
           <p>
-            I'm a freelance consultant and the developer of the eMondrian version of the Mondrian project.
+            I'm a freelance consultant and the developer of the eMondrian.
           </p>
           <p>
             I have two decades experience in developing open source and Microsoft based OLAP solutions.
