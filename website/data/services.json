@@ -2,27 +2,27 @@
   "services": [
     {
       "heading": "Build and tune custom eMondrian configuration",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "desc": "If you want to make changes to the eMondrian by yourself you have to clone two projects from GitHub: the eMondrian version of Mondrian and the eMondrian web application project. You can change any of those parts to get the desired result and then build it. Or you can just download the latest build version of the eMondrian from GitHub. The latest version isn't always tested enough and could contain errors. If you need a more stable version you have to choose one from some tested releases of the eMondrian. I will be glad to consult you on any of these options."
     },
     {
       "heading": "Deploy eMondrian server to your environment",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "desc": "eMondrian could be hosted on any java server (Apache Tomcat, Jetty, Tiny Java Web Server) and can work on Linux and Windows operating systems. I can help you to set up and tune the eMondrian server in your environment."
     },
     {
-      "heading": "Recode eMondrian server behavior by your demands",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "heading": "Bug Fixing and Changing eMondrian server behavior",
+      "desc": "You have found some bug and want to fix it as soon as possible, or you have some special demands and want to change the behavior of the eMondrian server on code level but don’t want to do it by yourself, I can design and implement it."
     },
     {
       "heading": "Design eMondrian schema. Create cubes, dimensions and measures for your database",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "desc": "In order to represent your data to users via eMondrian you have to design a schema with cubes, dimensions, hierarchies and measures. In a schema you also define Sets, Roles and describe columns for drillthrough operation. There are some best practices for different data sources. "
     },
     {
       "heading": "Set up Role based data access-control",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "desc": "You can restrict access to your data for different users with role based access-control. For each role you could grant access at cube, dimension, hierarchy and member levels. It’s possible to set for different roles different available sets of members of one hierarchy. For example, different roles could access only appropriate department data. After creating roles you could assign them to a particular user."
     },
     {
       "heading": "Tune eMondrian instance performance",
-      "desc": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis viverra arcu vel ullamcorper sodales. Nam nulla ipsum, rhoncus at mauris in, suscipit placerat nisl. Integer ornare venenatis nisl, ut commodo nibh vulputate vel. Morbi nibh nibh, varius id nibh ut, suscipit semper risus. "
+      "desc": "Each source database has its own features and behavior. To get the best performance you need to use different patterns while writing schemas for the datasource. Your database has unique characteristics. In order to get the most effective queries to your source database you may need to change some eMondrian server settings. "
     }
   ]
 }

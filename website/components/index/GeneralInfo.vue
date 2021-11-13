@@ -4,7 +4,7 @@
       What is eMondrian
     </h2>
     <div class="info_item_1-text">
-      eMonrian is an open-source free OLAP server. It is based on the <a href="https://github.com/pentaho/mondrian">Mondrian</a> project.
+      eMonrian is an open-source free <a href="https://en.wikipedia.org/wiki/Online_analytical_processing">OLAP</a> server. It is based on the <a href="https://github.com/pentaho/mondrian">Mondrian</a> project.
     </div>
     <div class="info_item_2-pic">
       <img src="../../assets/illust2.svg">
@@ -16,7 +16,7 @@
       <img src="../../assets/illust1.svg">
     </div>
     <div class="info_item_3-text">
-      eMondrian creates an analytic space and hides the complexity of underlying tables and their relations. It represents data as cubes, dimensions and measures.
+      eMondrian creates an analytic space and hides the complexity of underlying tables and their relations. It represents data as <a href="https://en.wikipedia.org/wiki/OLAP_cube">cubes</a>, dimensions and measures.
     </div>
   </div>
 </template>
