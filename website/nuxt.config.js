@@ -1,3 +1,5 @@
+console.log('')
+
 export default {
   // Target: https://go.nuxtjs.dev/config-target
   target: 'static',
@@ -48,21 +50,35 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
-    '@nuxtjs/google-fonts'
+    '@nuxtjs/google-fonts',
+    '@nuxtjs/google-analytics'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
+    '@nuxtjs/sitemap'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
   },
 
+  sitemap: {
+    hostname: 'https://sergeisemenkov.github.io/eMondrian/'
+  },
+
   googleFonts: {
     families: {
       Prompt: [400, 600],
       Montserrat: [500]
+    }
+  },
+  googleAnalytics: {
+    id: process.env.GOOGLE_ANALYTICS_ID // Use as fallback if no runtime config is provided
+  },
+  publicRuntimeConfig: {
+    googleAnalytics: {
+      id: process.env.GOOGLE_ANALYTICS_ID
     }
   }
 }
