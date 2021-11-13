@@ -11,7 +11,7 @@
             I'm a freelance consultant and the developer of the eMondrian version of the Mondrian project.
           </p>
           <p>
-            I have 18 years experience in developing open source and Microsoft based OLAP solutions.
+            I have two decades experience in developing open source and Microsoft based OLAP solutions.
           </p>
           <p class="links">
             <a href="https://www.linkedin.com/in/sergei-semenkov-129943103/">
