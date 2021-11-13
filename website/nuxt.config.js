@@ -64,7 +64,7 @@ export default {
   },
 
   sitemap: {
-    hostname: 'https://sergeisemenkov.github.io/eMondrian/'
+    hostname: 'https://sergeisemenkov.github.io/'
   },
 
   googleFonts: {
