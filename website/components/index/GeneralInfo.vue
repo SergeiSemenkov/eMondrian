@@ -4,19 +4,19 @@
       What is eMondrian
     </h2>
     <div class="info_item_1-text">
-      eMonrian is an open-source free OLAP server. It is based on mondrian project. It allows you to do Ad Hoc analysis.
+      eMonrian is an open-source free OLAP server. It is based on the <a href="https://github.com/pentaho/mondrian">Mondrian</a> project.
     </div>
     <div class="info_item_2-pic">
       <img src="../../assets/illust2.svg">
     </div>
     <div class="info_item_2-text">
-      You can explore, slice and dice the data without needing to write queries.
+      eMondrian allows you to do Ad-Hoc analysis. You can explore, slice and dice data without needing to write queries.
     </div>
     <div class="info_item_3-pic">
       <img src="../../assets/illust1.svg">
     </div>
     <div class="info_item_3-text">
-      eMondrian creates an analytic space and hides the complexity of underlying tables and their links. It represents the data as cubes, dimensions and measures.
+      eMondrian creates an analytic space and hides the complexity of underlying tables and their relations. It represents data as cubes, dimensions and measures.
     </div>
   </div>
 </template>

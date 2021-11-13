@@ -6,11 +6,11 @@
     <div class="grid_container">
       <div class="item item-1">
         <img src="../../assets/HowItWorks/illu1.png">
-        <p>eMondrian hides complexity of underlying source from the end-users and moves configuration responsibility from these users to a DBA or other app developer. It makes it simple to do Ad-hoc analysis and create enterprise reporting.</p>
+        <p>eMondrian hides complexity of underlying source from end-users and moves configuration responsibility from these users to a DBA or other app developer. It makes it simple to do Ad-hoc analysis and create enterprise reporting.</p>
       </div>
       <div class="item item-2">
         <img src="../../assets/HowItWorks/illu1.png">
-        <p>Mondrian server is a Relational OLAP (ROLAP) server that means that it always shows real time data from the source. This server runs queries written in the MDX language, reads data from a source database, and presents the results in a multidimensional format.</p>
+        <p>eMondrian server is a Relational OLAP (ROLAP) server that means it always shows real time data from a source. This server runs queries written in the MDX language, reads data from a source database and presents results in a multidimensional format.</p>
       </div>
       <div class="item item-3">
         <img src="../../assets/HowItWorks/illu1.png">
@@ -18,7 +18,7 @@
       </div>
       <div class="item item-4">
         <img src="../../assets/HowItWorks/illu1.png">
-        <p>Mondrian supports XMLA for Analysis and olap4j standards. So you can load data from it to your own application.</p>
+        <p>eMondrian supports XMLA for Analysis and olap4j standards. You can fetch data from it through ADOMD.Net  and OLE DB for OLAP libraries. So you can easily load data from eMondrian in your Java, .Net or Windows applications.</p>
       </div>
       <div class="item item-5">
         <img src="../../assets/HowItWorks/illu1.png">

@@ -7,7 +7,7 @@
       <div class="item_1">
         <h3>Deployment</h3>
         <ol>
-          <li>Download dist/emondrian.war file.</li>
+          <li>Download <a href="https://github.com/SergeiSemenkov/eMondrian/blob/main/dist/emondrian.war">emondrian.war</a> file.</li>
           <li>Copy emondrian.war file to webapps directory of your java server (Apache Tomcat, Jetty, Tiny Java Web Server).</li>
         </ol>
       </div>
