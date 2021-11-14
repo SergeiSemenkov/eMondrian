@@ -10,7 +10,7 @@
       <img src="../../assets/illust2.svg">
     </div>
     <div class="info_item_2-text">
-      eMondrian allows you to do Ad-Hoc analysis. You can explore, slice and dice data without needing to write queries.
+      eMondrian allows you to interactively analyze data from multiple perspectives. You can consolidate, detail, explore your data from different points of view and quickly create your custom reports.
     </div>
     <div class="info_item_3-pic">
       <img src="../../assets/illust1.svg">
