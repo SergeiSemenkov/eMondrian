@@ -24,6 +24,10 @@
             <img src="../../assets/arrow.svg">
           </a>
           <a class="secondary_button" @click="openQuickStart">Quick start</a>
+          <a class="secondary_button github_link" href="https://github.com/SergeiSemenkov/eMondrian">
+            <img src="../../assets/github_large.svg">
+            <span>Project source</span>
+          </a>
         </div>
       </div>
     </div>
@@ -111,6 +115,18 @@ export default {
 .header_main_buttons {
   display: flex;
   align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  max-width: 350px;
+  gap: 1.5rem;
+}
+
+.header_main_buttons > a:nth-child(1), .header_main_buttons > a:nth-child(2) {
+  flex: 1 0 auto;
+}
+
+.header_main_buttons > .primary_button, .header_main_buttons > .secondary_button {
+  margin-right: 0;
 }
 
 .header_main_info > h1 {
@@ -133,6 +149,16 @@ export default {
   font-size: 5rem;
   line-height: 1.5;
   color: #000000;
+}
+
+.github_link {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.github_link > img {
+  margin-right: 12px;
 }
 
 @media (max-width: 600px) {

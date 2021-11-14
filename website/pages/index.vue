@@ -62,7 +62,7 @@ main {
 .primary_button {
   display: flex;
   align-items: center;
-  padding: 0.5rem 2.125rem;
+  padding: 0.5rem 2.25rem;
   background-color: #1A2FEE;
   margin-right: 1.5rem;
   border-radius: 10px;
@@ -91,7 +91,7 @@ main {
 
 .secondary_button {
   display: block;
-  padding: 0.5rem 2.125rem;
+  padding: 0.5rem 2.25rem;
   border: 1px solid #000000;
   border-radius: 10px;
   text-decoration: none;
