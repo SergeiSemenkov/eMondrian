@@ -17,7 +17,7 @@
     <div class="header_main container">
       <div class="header_main_info">
         <h1>eMondrian</h1>
-        <p>Add business analysis to your databases</p>
+        <p>Add business intelligence capabilities to your databases</p>
         <div class="header_main_buttons">
           <a class="primary_button" @click="openMore">
             <span>More</span>
