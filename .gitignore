@@ -7,4 +7,5 @@ target
 .settings
 .classpath
 .idea
+website
 *.json
