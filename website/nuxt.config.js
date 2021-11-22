@@ -1,4 +1,4 @@
-console.log('')
+import { DirToListOfItems } from './utils/docs'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -8,7 +8,24 @@ export default {
     port: 5000 // default: 3000
   },
   router: {
-    base: '/eMondrian/'
+    base: '/eMondrian/',
+    extendRoutes (routes, resolve) {
+      const docsArticles = DirToListOfItems('./content/docs/') // resolve(__dirname, 'pages/404.vue'))
+      const docs = routes.find(e => e.name === 'docs')
+      if (!Array.isArray(docs.children)) {
+        docs.children = []
+      }
+      docsArticles.forEach((e) => {
+        docs.children.push({
+          name: e.name.replaceAll(' ', '_'),
+          path: `/docs/${e.name.replaceAll(' ', '_')}`,
+          component: resolve(__dirname, 'components/docs/docViewer.vue'),
+          meta: {
+            originalDocumentContent: e.path
+          }
+        })
+      })
+    }
   },
 
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -50,13 +67,15 @@ export default {
   buildModules: [
     // https://go.nuxtjs.dev/eslint
     '@nuxtjs/eslint-module',
+    '@nuxtjs/dotenv',
     '@nuxtjs/google-fonts',
     '@nuxtjs/google-analytics'
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
-    '@nuxtjs/sitemap'
+    '@nuxtjs/sitemap',
+    '@nuxtjs/markdownit'
   ],
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -80,5 +99,8 @@ export default {
     googleAnalytics: {
       id: process.env.GOOGLE_ANALYTICS_ID
     }
+  },
+  markdownit: {
+    runtime: true // Support `$md()`
   }
 }
