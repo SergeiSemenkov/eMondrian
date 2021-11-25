@@ -1,5 +1,6 @@
 import fs from 'fs'
 import { parse } from 'path'
+import docs from '../content/docs/docs.json'
 
 export function DirToObjectArray (path) {
   const arr = []
@@ -39,6 +40,40 @@ export function DirToListOfItems (path, prefix = '') {
     }
   }
   return arr.flat()
+}
+
+export function getDocumentsTree () {
+  const { articles } = docs
+  return articles
+}
+
+export function getDocumentsRouterTree (component) {
+  let { articles } = docs
+  articles = articles.map(e => getRoutesFromNode(e, component))
+  return articles.flat()
+}
+
+function getRoutesFromNode (node, component) {
+  let result = []
+
+  if (node.originalDocumentContent) {
+    result.push({
+      name: node.name,
+      path: `/docs/${node.path.replaceAll(' ', '_')}`,
+      component,
+      meta: {
+        originalDocumentContent: node.originalDocumentContent,
+        baseFolder: node.baseFolder
+      }
+    })
+  }
+
+  if (node.children) {
+    const tmp = node.children.map(e => getRoutesFromNode(e, component))
+    result = [...result, ...tmp.flat()]
+  }
+
+  return result
 }
 
 export function GetFileContent (path) {

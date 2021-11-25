@@ -1,0 +1,27 @@
+{
+  "articles": [
+    {
+      "name": "Introduction",
+      "path": "Introduction",
+      "originalDocumentContent": "./content/docs/Introduction/Introduction.md",
+      "baseFolder": "content/docs/Introduction"
+    },
+    {
+      "name": "Chapter 1",
+      "children": [
+        {
+          "name": "Article 1",
+          "path": "Chapter 1/Article 1",
+          "originalDocumentContent": "./content/docs/Chapter 1/Article 1/Article 1.md",
+          "baseFolder": "content/docs/Chapter 1/Article 1"
+        },
+        {
+          "name": "Article 2",
+          "path": "Chapter 1/Article 2",
+          "originalDocumentContent": "./content/docs/Chapter 1/Article 2/Article 2.md",
+          "baseFolder": "content/docs/Chapter 1/Article 2"
+        }
+      ]
+    }
+  ]
+}

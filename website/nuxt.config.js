@@ -1,4 +1,5 @@
-import { DirToListOfItems } from './utils/docs'
+import { getDocumentsRouterTree } from './utils/docs'
+import CopyWebpackPlugin from 'copy-webpack-plugin'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -10,21 +11,14 @@ export default {
   router: {
     base: '/eMondrian/',
     extendRoutes (routes, resolve) {
-      const docsArticles = DirToListOfItems('./content/docs/') // resolve(__dirname, 'pages/404.vue'))
-      const docs = routes.find(e => e.name === 'docs')
-      if (!Array.isArray(docs.children)) {
-        docs.children = []
+      const docsRoute = routes.find(e => e.name === 'docs')
+      if (!Array.isArray(docsRoute.children)) {
+        docsRoute.children = []
       }
-      docsArticles.forEach((e) => {
-        docs.children.push({
-          name: e.name.replaceAll(' ', '_'),
-          path: `/docs/${e.name.replaceAll(' ', '_')}`,
-          component: resolve(__dirname, 'components/docs/docViewer.vue'),
-          meta: {
-            originalDocumentContent: e.path
-          }
-        })
-      })
+
+      const docsComponent = resolve(__dirname, 'components/docs/docViewer.vue')
+      const docs = getDocumentsRouterTree(docsComponent)
+      docsRoute.children.push(...docs)
     }
   },
 
@@ -41,7 +35,7 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/eMondrian/favicon.ico' }
     ],
     script: [
       {
@@ -80,6 +74,14 @@ export default {
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {
+    plugins: [
+      new CopyWebpackPlugin({
+        patterns: [{
+          from: 'content/',
+          to: 'content/'
+        }]
+      })
+    ]
   },
 
   sitemap: {
