@@ -6,9 +6,9 @@
 
 export default {
   layout: 'docs',
-  middleware ({ route, redirect }) {
-    if (route.fullPath === '/docs') {
-      return redirect('/docs/introduction')
+  mounted () {
+    if (this.$route.fullPath === '/docs') {
+      this.$router.push('/docs/introduction')
     }
   }
 }
