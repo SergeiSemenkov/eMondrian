@@ -5,6 +5,11 @@
 <script>
 
 export default {
-  layout: 'docs'
+  layout: 'docs',
+  middleware ({ route, redirect }) {
+    if (route.fullPath === '/docs') {
+      return redirect('/docs/introduction')
+    }
+  }
 }
 </script>
