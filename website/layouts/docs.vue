@@ -1,6 +1,9 @@
 <template>
   <div class="docs_container">
     <nav class="docs_nav">
+      <nuxt-link class="logo" to="/">
+        <img src="~/assets/logo_white.svg">
+      </nuxt-link>
       <tree-node
         v-for="child in files"
         :key="child.name"
@@ -25,7 +28,7 @@ export default {
   fetch () {
     if (process.server) {
       const docsUtils = require('@/utils/docs')
-      const files = docsUtils.DirToObjectArray('./content/docs/')
+      const files = docsUtils.getDocumentsTree()
       this.files = files
     }
   }
@@ -33,6 +36,16 @@ export default {
 </script>
 
 <style scoped>
+.logo {
+  width: 100%;
+  margin-bottom: 3rem;
+  display: block;
+}
+
+.logo img {
+  width: 100%;
+}
+
 .docs_container {
   display: flex;
   height: 100%;
@@ -91,5 +104,9 @@ export default {
 .docs_article p img {
   max-width: 100%;
   border-radius: 12px;
+}
+
+.docs_article pre {
+  overflow: auto;
 }
 </style>

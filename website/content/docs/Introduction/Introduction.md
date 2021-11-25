@@ -4,7 +4,7 @@
 
 eMondrian is a free open-source [OLAP](https://en.wikipedia.org/wiki/Online_analytical_processing) server. It is based on the [Mondrian](https://github.com/pentaho/mondrian) project. OLAP server allows you to represent your database as a multidimensional space with dimensions and measures. It hides the complexity of underlying tables and their relations and allows you to interactively analyze data from multiple perspectives. eMondrian server can run on Windows and Linux operating systems.
 
-![Image description](https://dev-to-uploads.s3.amazonaws.com/uploads/articles/j34edhvspxe64fjrw52k.png)
+![Image description](__contentFolder__/scheme.png)
 
 eMondrian supports XML for Analysis (XMLA) standard and OLE DB for OLAP at the level that makes it possible to connect to it from client tools such as Microsoft Excel, Power BI, Tableau and many others. The logic of the original Mondrian was changed in order to improve performance of queries specific to these clients and to support clients’ features, for example Excel’s sessions, calculated members and sets.
 

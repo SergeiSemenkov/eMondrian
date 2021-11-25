@@ -1,6 +1,9 @@
 <template>
   <div class="header_container">
     <nav class="header_navigation">
+      <div class="logo">
+        <img src="../../assets/logo.svg">
+      </div>
       <input type="checkbox">
       <div class="burger_container">
         <span />
@@ -66,9 +69,16 @@ export default {
   background-repeat: no-repeat;
 }
 
+.header_navigation .logo {
+  position: absolute;
+}
+
 .header_navigation {
   display: block;
   width: 100%;
+  max-width: 1296px;
+  margin: auto;
+  padding-top: 2rem;
 }
 
 .header_navigation input {
@@ -161,7 +171,15 @@ export default {
   margin-right: 12px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 800px) {
+  .header_navigation {
+    padding-top: 0.75rem;
+  }
+
+  .header_navigation .logo {
+    padding-left: 0.5rem;
+  }
+
   .header_main_info > h1 {
     font-size: 1.25rem;
     line-height: 1.5;

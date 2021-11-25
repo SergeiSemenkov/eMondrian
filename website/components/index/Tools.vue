@@ -22,6 +22,9 @@
     <div class="item_5 item_more">
       <p>And more</p>
     </div>
+    <div class="item_6 picture">
+      <img src="../../assets/scheme.png">
+    </div>
   </div>
 </template>
 
@@ -41,7 +44,8 @@ export default {
   grid-template-areas:
     "a a a a a a n b b c c m"
     "a a a a a a n d d e e m"
-    "k k k k k k n f f f f m";
+    "k k k k k k n f f f f m"
+    "g g g g g g g g g g g g";
   margin-top: 12rem;
 }
 
@@ -105,11 +109,20 @@ export default {
   grid-area: f;
 }
 
+.item_6 {
+  grid-area: g;
+}
+
+.picture img {
+  width: 100%;
+}
+
 @media (max-width: 1200px) {
   .grid_container {
-    margin-top: 7rem;
+    margin-top: 3rem;
     margin-bottom: 4.5rem;
     grid-template-areas:
+    "g g"
     "a a"
     "b c"
     "d e"
@@ -124,6 +137,10 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .picture img {
+    display: none;
   }
 }
 
