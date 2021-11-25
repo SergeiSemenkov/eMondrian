@@ -10,6 +10,8 @@
  * Released under the MIT License.
  */
 
+/*! https://mths.be/punycode v1.4.1 by @mathias */
+
 
 /*!
   * vue-router v3.5.2
