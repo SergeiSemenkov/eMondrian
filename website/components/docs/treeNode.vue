@@ -72,6 +72,7 @@ export default {
 
 .tree_node {
   cursor: pointer;
+  text-align: left;
 }
 
 .tree_node .isActive {
