@@ -239,4 +239,21 @@ export default {
 .docs_article pre {
   overflow: auto;
 }
+
+@media (max-width: 800px) {
+  .docs_article p {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+
+  .docs_article h1 {
+    font-size: 2rem;
+    line-height: 1.5;
+  }
+
+  .docs_article h2 {
+    font-size: 1.5rem;
+    line-height: 1.33;
+  }
+}
 </style>
