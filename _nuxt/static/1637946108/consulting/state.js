@@ -1,1 +1,0 @@
-window.__NUXT__=(function(a){return {staticAssetsBase:"\u002FeMondrian\u002F_nuxt\u002Fstatic\u002F1637946108",layout:"default",error:a,serverRendered:true,routePath:"\u002Fconsulting",config:{googleAnalytics:{id:"UA-212825139-1"},_app:{basePath:"\u002FeMondrian\u002F",assetsPath:"\u002FeMondrian\u002F_nuxt\u002F",cdnURL:a}}}}(null));
