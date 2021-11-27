@@ -59,7 +59,7 @@ function getRoutesFromNode (node, component) {
   if (node.originalDocumentContent) {
     result.push({
       name: node.name,
-      path: `/docs/${node.path.replaceAll(' ', '_')}`,
+      path: `/docs/${node.path.replace(/\s/g, '_')}`,
       component,
       meta: {
         originalDocumentContent: node.originalDocumentContent,

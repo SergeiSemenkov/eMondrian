@@ -15,7 +15,7 @@ export default {
       const { originalDocumentContent, baseFolder } = route.meta.find(e => e.originalDocumentContent)
       data = docsUtils.GetFileContent(originalDocumentContent)
 
-      data = data.replaceAll('__contentFolder__', `${$config._app.assetsPath}${baseFolder}`)
+      data = data.replace(/__contentFolder__/g, `${$config._app.assetsPath}${baseFolder}`)
     }
     return {
       data
