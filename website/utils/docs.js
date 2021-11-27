@@ -2,6 +2,15 @@ import fs from 'fs'
 import { parse } from 'path'
 import docs from '../content/docs/docs.json'
 
+// eslint-disable-next-line no-extend-native
+Object.defineProperty(Array.prototype, 'flat', {
+  value (depth = 1) {
+    return this.reduce(function (flat, toFlatten) {
+      return flat.concat((Array.isArray(toFlatten) && (depth > 1)) ? toFlatten.flat(depth - 1) : toFlatten)
+    }, [])
+  }
+})
+
 export function DirToObjectArray (path) {
   const arr = []
   const content = fs.readdirSync(path, { withFileTypes: true })
