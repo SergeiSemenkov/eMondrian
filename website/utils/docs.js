@@ -1,15 +1,7 @@
 import fs from 'fs'
 import { parse } from 'path'
 import docs from '../content/docs/docs.json'
-
-// eslint-disable-next-line no-extend-native
-Object.defineProperty(Array.prototype, 'flat', {
-  value (depth = 1) {
-    return this.reduce(function (flat, toFlatten) {
-      return flat.concat((Array.isArray(toFlatten) && (depth > 1)) ? toFlatten.flat(depth - 1) : toFlatten)
-    }, [])
-  }
-})
+import { flattenDeep } from 'lodash'
 
 export function DirToObjectArray (path) {
   const arr = []
@@ -48,7 +40,7 @@ export function DirToListOfItems (path, prefix = '') {
       }
     }
   }
-  return arr.flat()
+  return flattenDeep(arr)
 }
 
 export function getDocumentsTree () {
@@ -59,7 +51,7 @@ export function getDocumentsTree () {
 export function getDocumentsRouterTree (component) {
   let { articles } = docs
   articles = articles.map(e => getRoutesFromNode(e, component))
-  return articles.flat()
+  return flattenDeep(articles)
 }
 
 function getRoutesFromNode (node, component) {
@@ -79,7 +71,7 @@ function getRoutesFromNode (node, component) {
 
   if (node.children) {
     const tmp = node.children.map(e => getRoutesFromNode(e, component))
-    result = [...result, ...tmp.flat()]
+    result = [...result, ...flattenDeep(tmp)]
   }
 
   return result
