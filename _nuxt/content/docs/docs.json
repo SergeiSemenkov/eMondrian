@@ -1,0 +1,10 @@
+{
+  "articles": [
+    {
+      "name": "Introduction",
+      "path": "Introduction",
+      "originalDocumentContent": "./content/docs/Introduction/Introduction.md",
+      "baseFolder": "content/docs/Introduction"
+    }
+  ]
+}
