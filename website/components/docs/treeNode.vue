@@ -15,7 +15,6 @@
         <tree-node
           v-for="child in treeNode.children"
           :key="child.name"
-          :url="url + treeNode.name.replaceAll(' ', '_') + '/'"
           :tree-node="child"
           :level="level + 1"
         />
@@ -24,7 +23,7 @@
     <template v-else>
       <router-link
         :class="{ 'isActive': isActive }"
-        :to="'/docs/' + url + treeNode.name.replaceAll(' ', '_')"
+        :to="'/docs/' + treeNode.path"
       >
         {{ treeNode.name }}
       </router-link>
@@ -43,15 +42,11 @@ export default {
     level: {
       type: Number,
       default: 1
-    },
-    url: {
-      type: String,
-      default: ''
     }
   },
   data () {
     return {
-      isOpened: this.$route.fullPath.includes('/docs/' + this.url + this.treeNode.name.replaceAll(' ', '_'))
+      isOpened: this.$route.fullPath.includes('/docs/' + this.treeNode.path)
     }
   },
   computed: {
@@ -59,7 +54,7 @@ export default {
       return Array.isArray(this.treeNode.children) && this.treeNode.children.length
     },
     isActive () {
-      return this.$route.fullPath.includes('/docs/' + this.url + this.treeNode.name.replaceAll(' ', '_'))
+      return this.$route.fullPath.includes('/docs/' + this.treeNode.path)
     }
   }
 }
