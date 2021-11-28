@@ -80,9 +80,6 @@ export default {
         patterns: [{
           from: 'content/',
           to: 'content/'
-        }, {
-          from: 'originalPentahoDocs',
-          to: path.join(__dirname, 'dist/original_docs')
         }]
       })
     ]
