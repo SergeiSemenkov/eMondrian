@@ -1,5 +1,6 @@
-import { getDocumentsRouterTree } from './utils/docs'
+import path from 'path'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
+import { getDocumentsRouterTree } from './utils/docs'
 
 export default {
   // Target: https://go.nuxtjs.dev/config-target
@@ -79,6 +80,9 @@ export default {
         patterns: [{
           from: 'content/',
           to: 'content/'
+        }, {
+          from: 'originalPentahoDocs',
+          to: path.join(__dirname, 'dist/original_docs')
         }]
       })
     ]
