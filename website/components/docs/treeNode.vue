@@ -17,16 +17,17 @@
           :key="child.name"
           :tree-node="child"
           :level="level + 1"
+          @openLink="$emit('openLink', $event)"
         />
       </div>
     </template>
     <template v-else>
-      <router-link
+      <a
         :class="{ 'isActive': isActive }"
-        :to="'/docs/' + treeNode.path"
+        @click="$emit('openLink', '/docs/' + treeNode.path)"
       >
         {{ treeNode.name }}
-      </router-link>
+      </a>
     </template>
   </div>
 </template>

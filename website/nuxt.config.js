@@ -1,4 +1,3 @@
-import path from 'path'
 import CopyWebpackPlugin from 'copy-webpack-plugin'
 import { getDocumentsRouterTree } from './utils/docs'
 

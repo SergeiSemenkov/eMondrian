@@ -68,6 +68,7 @@ main {
   border-radius: 10px;
   text-decoration: none;
   box-shadow: 0px 4px 30px #BCBEFF;
+  justify-content: center;
 
   font-family: Prompt;
   font-style: normal;
@@ -91,11 +92,14 @@ main {
 
 .secondary_button {
   display: block;
+  align-items: center;
   padding: 0.5rem 2.25rem;
   border: 1px solid #000000;
   border-radius: 10px;
   text-decoration: none;
   margin-right: 1.5rem;
+  justify-content: center;
+  text-align: center;
 
   font-family: Prompt;
   font-style: normal;
