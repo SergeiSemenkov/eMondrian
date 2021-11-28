@@ -11,6 +11,23 @@
       "path": "original_mondrian_docs",
       "originalDocumentContent": "./content/docs/original_mondrian_docs/original_mondrian_docs.md",
       "baseFolder": "content/docs/original_mondrian_docs"
+    },
+    {
+      "name": "XMLA service address",
+      "path": "xmla_address",
+      "originalDocumentContent": "./content/docs/xmla_address/xmla_address.md",
+      "baseFolder": "content/docs/xmla_address"
+    },
+    {
+      "name": "Client Tools",
+      "children": [
+        {
+          "name": "How to connect from Excel",
+          "path": "client_tools/excel_connect",
+          "originalDocumentContent": "./content/docs/client_tools/excel_connect/excel_connect.md",
+          "baseFolder": "content/docs/client_tools/excel_connect"
+        }
+      ]
     }
   ]
 }
