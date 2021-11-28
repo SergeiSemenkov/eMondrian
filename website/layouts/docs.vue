@@ -1,6 +1,6 @@
 <template>
   <div class="docs_container">
-    <input type="checkbox">
+    <input ref="checkbox" type="checkbox">
     <div class="burger_container">
       <span />
       <span />
@@ -15,6 +15,7 @@
         v-for="child in files"
         :key="child.name"
         :tree-node="child"
+        @openLink="openLink"
       />
     </nav>
     <Nuxt class="docs_article" />
@@ -37,6 +38,12 @@ export default {
       const docsUtils = require('@/utils/docs')
       const files = docsUtils.getDocumentsTree()
       this.files = files
+    }
+  },
+  methods: {
+    openLink (url) {
+      this.$refs.checkbox.checked = false
+      this.$router.push(url)
     }
   }
 }
@@ -94,6 +101,11 @@ export default {
 }
 
 @media (max-width: 800px) {
+  .docs_article {
+    margin-top: 5rem;
+    padding: 0 3rem 5rem;
+  }
+
   .docs_nav {
     display: none;
   }

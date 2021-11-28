@@ -289,4 +289,10 @@ export default {
                 opacity 0.55s ease;
   }
 }
+
+@media (max-width: 400px) {
+  .contacts a {
+    font-size: 0.8rem;
+  }
+}
 </style>
