@@ -35,7 +35,8 @@ export default {
       { name: 'format-detection', content: 'telephone=no' }
     ],
     link: [
-      { rel: 'icon', type: 'image/x-icon', href: '/eMondrian/favicon.ico' }
+      { rel: 'icon', type: 'image/x-icon', href: '/eMondrian/favicon.ico' },
+      { rel: 'stylesheet', href: 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/rainbow.min.css' }
     ],
     script: [
       {
