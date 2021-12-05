@@ -6,7 +6,7 @@ The main feature of this version is support of ADOMD.NET and Excel clients.
 Visit [eMondrian project site](https://sergeisemenkov.github.io/eMondrian/) for more information and documentation.
 
 ## Deployment
-1. Download *dist/emondrian.war* file.
+1. Download [*emondrian.war*](https://github.com/SergeiSemenkov/eMondrian/releases/latest/download/emondrian.war) file.
 2. Copy *emondrian.war* file to *webapps* directory of your java server (Apache Tomcat, Jetty, Tiny Java Web Server).
 
 ## eMondrian contains: 
