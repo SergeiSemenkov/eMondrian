@@ -7,7 +7,7 @@ Get address of your eMondrian XMLA service
 See [here](/eMondrian/docs/xmla_address) how to get your eMondrian XMLA service address.
 
 In this example an address is
-```
+``` plaintext
 http://192.168.100.4:8080/emondrian/xmla
 ```
 Connect from Excel
