@@ -28,6 +28,12 @@
           "baseFolder": "content/docs/client_tools/excel_connect"
         }
       ]
+    },
+    {
+      "name": "Install eMondrian as Docker Container on Ubuntu",
+      "path": "setup/install_docker_ubuntu",
+      "originalDocumentContent": "./content/docs/setup/install_docker_ubuntu/install_docker_ubuntu.md",
+      "baseFolder": "content/docs/setup/install_docker_ubuntu"
     }
   ]
 }
