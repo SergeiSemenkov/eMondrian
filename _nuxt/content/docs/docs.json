@@ -26,6 +26,12 @@
           "path": "client_tools/excel_connect",
           "originalDocumentContent": "./content/docs/client_tools/excel_connect/excel_connect.md",
           "baseFolder": "content/docs/client_tools/excel_connect"
+        },
+        {
+          "name": "How to connect from Tableau Desktop",
+          "path": "client_tools/tableau_connect",
+          "originalDocumentContent": "./content/docs/client_tools/tableau_connect/tableau_connect.md",
+          "baseFolder": "content/docs/client_tools/tableau_connect"
         }
       ]
     },
