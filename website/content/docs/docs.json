@@ -36,10 +36,22 @@
       ]
     },
     {
-      "name": "Install eMondrian as Docker Container on Ubuntu",
+      "name": "Install eMondrian Demo as Docker Container on Ubuntu",
       "path": "setup/install_docker_ubuntu",
       "originalDocumentContent": "./content/docs/setup/install_docker_ubuntu/install_docker_ubuntu.md",
       "baseFolder": "content/docs/setup/install_docker_ubuntu"
+    },
+    {
+      "name": "Install eMondrian server on Windows",
+      "path": "setup/install_windows",
+      "originalDocumentContent": "./content/docs/setup/install_windows/install_windows.md",
+      "baseFolder": "content/docs/setup/install_windows"
+    },
+    {
+      "name": "How To Open 8080 Port In Windows 10",
+      "path": "server/windows_firewall_open",
+      "originalDocumentContent": "./content/docs/server/windows_firewall_open/windows_firewall_open.md",
+      "baseFolder": "content/docs/server/windows_firewall_open"
     }
   ]
 }
