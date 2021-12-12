@@ -39,7 +39,7 @@ C:\Program Files (x86)\Apache Software Foundation\Tomcat 9.0\bin\Tomcat9w.exe
 ```
  and then press **Ctrl+Shift+Enter**.
 
-On the General tab select Startup type - Automatic.
+On the **General** tab select **Startup type** - **Automatic**.
 
 ![](__contentFolder__/install_windows_starttype.png)
 
@@ -62,14 +62,20 @@ You can download latest eMondrian release from
 
 Copy downloaded *emondrian.war* file to Tomcat *webapps* folder. By default it is *C:\Program Files (x86)\Apache Software Foundation\Tomcat 9.0\webapps*.
 
-To check that Tomcat server is running try in browser on the server machine following link.
-[http://localhost:8080/](http://localhost:8080/)
+To check that Tomcat server is running try in browser on the server machine the following address.
+``` plaintext
+http://localhost:8080/
+```
 
-You have to see the this.
+You have to see this.
 
 ![](__contentFolder__/install_windows_tomcat_page.png)
 
-At [http://localhost:8080/emondrian](http://localhost:8080/emondrian) you have to see the eMondrian server main page.
+At 
+``` plaintext
+http://localhost:8080/emondrian
+```
+you have to see the eMondrian server main page.
 
 ![](__contentFolder__/install_windows_emondrian_page.png)
 
@@ -81,6 +87,6 @@ If you will connect to eMondrian from the same machine you can use the following
 http://localhost:8080/emondrian/xmla
 ```
 
-To connect to eMondrian from another machine you need to open firewall port 8080. How to do it see [here](/eMondrian/docs/server/windows_firewall_open).
+To connect to eMondrian from another machine you need to open firewall port 8080. How to do that see [here](/eMondrian/docs/server/windows_firewall_open).
 
 See [here](/eMondrian/docs/xmla_address) how to get your eMondrian XMLA service network address.
