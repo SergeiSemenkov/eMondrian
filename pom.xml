@@ -17,6 +17,8 @@
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.source>1.7</maven.compiler.source>
     <maven.compiler.target>1.7</maven.compiler.target>
+    <node.version>v10.15.0</node.version>
+    <npm.version>6.14.3</npm.version>
   </properties>
 
   <dependencies>
@@ -47,11 +49,85 @@
     </dependency>
 
   </dependencies>
-
-
   
   <build>
     <finalName>emondrian</finalName>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <version>3.0.0</version>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>Create frontend</id>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <executable>clone_schema_editor.sh</executable>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>com.github.eirslett</groupId>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <version>1.7.6</version>
+        <executions>
+            <execution>
+                <id>Install node and npm</id>
+                <goals>
+                    <goal>install-node-and-npm</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                    <nodeVersion>${node.version}</nodeVersion>
+                    <npmVersion>${npm.version}</npmVersion>
+                </configuration>
+            </execution>
+            <execution>
+                <id>npm install</id>
+                <goals>
+                    <goal>npm</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                    <arguments>install</arguments>
+                </configuration>
+            </execution>
+            <execution>
+                <id>npm build</id>
+                <goals>
+                    <goal>npm</goal>
+                </goals>
+                <phase>generate-resources</phase>
+                <configuration>
+                    <arguments>run build</arguments>
+                </configuration>
+            </execution>
+        </executions>
+        <configuration>
+            <nodeVersion>${node.version}</nodeVersion>
+            <workingDirectory>src/SchemaEditor</workingDirectory>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.2</version>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>src/SchemaEditor/dist</directory>
+              <targetPath>schema_editor</targetPath>
+            </resource>
+          </webResources>
+        </configuration>
+    </plugin>
+    </plugins>
+
     <pluginManagement><!-- lock down plugins versions to avoid using Maven defaults (may be moved to parent pom) -->
       <plugins>
         <plugin>

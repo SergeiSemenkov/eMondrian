@@ -1,5 +1,6 @@
 target
 */src/generated
+src/SchemaEditor
 *.ipr
 *.iws
 *.iml
