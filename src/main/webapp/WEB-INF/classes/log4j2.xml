@@ -1,0 +1,33 @@
+<Configuration>
+    <Appenders>
+        <File name="FILE" fileName="${sys:catalina.home}/logs/mondrian.log" append="false">
+            <PatternLayout pattern="%d %-5p [%c] %m%n"/>
+        </File>
+        <File name="MDXLOG" fileName="${sys:catalina.home}/logs/mondrian-mdx.log" append="false">
+            <PatternLayout pattern="%d %-5p [%c] %m%n"/>
+        </File>
+        <File name="SQLLOG" fileName="${sys:catalina.home}/logs/mondrian-sql.log" append="false">
+            <PatternLayout pattern="%d %-5p [%c] %m%n"/>
+        </File>
+        <Console name="STDOUT" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.apache" level="info">
+            <AppenderRef ref="A1"/>
+        </Logger>
+        <Logger name="mondrian" level="info">
+        </Logger>
+        <Logger name="mondrian.mdx" level="debug">
+            <AppenderRef ref="MDXLOG"/>
+        </Logger>
+        <Logger name="mondrian.sql" level="debug">
+            <AppenderRef ref="SQLLOG"/>
+        </Logger>
+        <Root level="debug">
+            <AppenderRef ref="CONSOLE"/>
+            <AppenderRef ref="FILE"/>
+        </Root>
+    </Loggers>
+</Configuration>
