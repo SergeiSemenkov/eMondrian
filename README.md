@@ -1,7 +1,7 @@
 # eMondrian
-eMondrian is a distribution of the Mondrian (R)OLAP engine version.
+eMondrian is a free (R)OLAP server. It is a version of the Mondrian.
 
-The main feature of this version is support of ADOMD.NET and Excel clients.
+eMondrian supports XMLA standard. It allows connecting to eMondrian from Excel, Tableau, Power BI and client tools that use ADOMD.NET library.
 
 Visit [eMondrian project site](https://sergeisemenkov.github.io/eMondrian/) for more information and documentation.
 
@@ -13,17 +13,11 @@ Visit [eMondrian project site](https://sergeisemenkov.github.io/eMondrian/) for 
 - eMondrian Binaries
 - Configuration files to deploy eMondrian to a servlet container (like Tomcat, Jetty, etc.)
 - Sample databases
+- The Schema Editor (Alfa Version)
 
-## Connect Microsoft Excel to Mondrian Cube:
-On Excel **DATA** tab select **From Other Sources** item and then select **From Analysis Services**.
-Enter
-
-*http://<your_server_address>:8080/emondrian/xmla* 
-
-as **Server name**.
-For example,
-
-*http://localhost:8080/emondrian/xmla*
+## How to connect to eMondrian:
+- [How to connect from Excel](https://sergeisemenkov.github.io/eMondrian/docs/client_tools/excel_connect)
+- [How to connect from Tableau Desktop](https://sergeisemenkov.github.io/eMondrian/docs/client_tools/tableau_connect)
 
 ## Connect ADOMD.Net application to Mondrian Cube
 To connect to mondrian from ADOMD.Net application you must use folowing connection string:
