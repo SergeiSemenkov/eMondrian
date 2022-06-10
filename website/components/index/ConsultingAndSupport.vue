@@ -182,6 +182,7 @@ export default {
   height: 4rem;
   flex-basis: 4rem;
   margin-left: 1.5rem;
+  margin-bottom: -2.5rem;
 
   background: rgba(255, 255, 255, 0.12);
   border: 2px solid #FFFFFF;

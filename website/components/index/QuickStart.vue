@@ -52,7 +52,8 @@ export default {
   padding: 10rem 2rem 20rem;
   background-size: cover;
   background-position: bottom left;
-  background-image: url("../../assets/back34.svg");
+  background: rgb(251,155,43);
+  background: linear-gradient(360deg, rgba(251,155,43,1) 0%, rgba(255,255,255,1) 100%);
 }
 
 .grid_container {
