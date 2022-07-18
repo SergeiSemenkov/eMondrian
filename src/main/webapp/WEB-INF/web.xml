@@ -59,10 +59,19 @@
     -->
     
   </servlet>
-    
+
+  <servlet>
+    <servlet-name>LogResurce</servlet-name>
+    <servlet-class>mondrian.util.LogResource</servlet-class>
+  </servlet>
+
   <servlet-mapping>
     <servlet-name>MondrianXmlaServlet</servlet-name>
     <url-pattern>/xmla</url-pattern>
   </servlet-mapping>
-  
+  <servlet-mapping>
+    <servlet-name>LogResurce</servlet-name>
+    <url-pattern>/logs/*</url-pattern>
+  </servlet-mapping>
+
 </web-app>
