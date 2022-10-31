@@ -57,7 +57,17 @@
     </init-param>
 
     -->
-    
+
+    <!--
+    Callbacks separated with ;
+
+    <init-param>
+      <param-name>Callbacks</param-name>
+      <param-value>emondrian.CatalinaAuthenticationXmlaRequestCallback</param-value>
+    </init-param>
+
+    -->
+
   </servlet>
 
   <servlet>
