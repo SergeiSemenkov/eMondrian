@@ -6,7 +6,7 @@ eMondrian supports XMLA standard. It allows connecting to eMondrian from Excel, 
 Visit [eMondrian project site](https://sergeisemenkov.github.io/eMondrian/) for more information and documentation.
 
 ## Building
-See [eMondrian Developer Guide]().
+See [eMondrian Developer Guide](https://sergeisemenkov.github.io/eMondrian/docs/developer_guide).
 
 ## Deployment
 1. Download [*emondrian.war*](https://github.com/SergeiSemenkov/eMondrian/releases/latest/download/emondrian.war) file.
