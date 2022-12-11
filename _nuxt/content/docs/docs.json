@@ -52,6 +52,12 @@
       "path": "server/windows_firewall_open",
       "originalDocumentContent": "./content/docs/server/windows_firewall_open/windows_firewall_open.md",
       "baseFolder": "content/docs/server/windows_firewall_open"
+    },
+    {
+      "name": "eMondrian Developer Guide",
+      "path": "developer_guide",
+      "originalDocumentContent": "./content/docs/developer_guide/developer_guide.md",
+      "baseFolder": "content/docs/developer_guide"
     }
   ]
 }
