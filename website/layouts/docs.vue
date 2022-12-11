@@ -91,7 +91,7 @@ export default {
   flex: 1 1 30%;
   color: #ffffff;
   padding: 0 2.5rem 5rem;
-  margin-top: 9rem;
+  margin-top: 8rem;
   overflow: auto;
   box-sizing: border-box;
 }
