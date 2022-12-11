@@ -28,6 +28,11 @@ Unicode is supported. ☺
 An h2 header
 ------------
 
+# An h1 header
+## An h2 header
+### An h3 header
+#### An h4 header
+
 Here's a numbered list:
 
  1. first item
