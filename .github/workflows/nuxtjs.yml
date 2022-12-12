@@ -40,9 +40,7 @@ jobs:
           node-version: "16"
           cache: ${{ steps.detect-package-manager.outputs.manager }}
       - name: Install dependencies
-        run: |
-          ls
-          npm ci
+        run: npm ci
       - name: Static HTML export with Nuxt
         env:
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
