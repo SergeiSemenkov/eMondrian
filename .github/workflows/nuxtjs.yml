@@ -45,9 +45,8 @@ jobs:
         env:
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         run: |
-          echo "$GOOGLE_ANALYTICS_ID"
+          printenv
           npm run generate
-          ls
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
