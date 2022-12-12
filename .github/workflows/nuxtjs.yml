@@ -45,6 +45,7 @@ jobs:
         env:
           GOOGLE_ANALYTICS_ID: ${{ secrets.GOOGLE_ANALYTICS_ID }}
         run: |
+          echo "$GOOGLE_ANALYTICS_ID"
           npm run generate
           ls
       - name: Upload artifact
