@@ -52,6 +52,8 @@ export default {
   color: #FFFDFD;
 
   cursor: pointer;
+  margin-bottom: 1.5rem;
+  border: none;
 }
 
 h2 {
