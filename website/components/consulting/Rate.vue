@@ -31,7 +31,7 @@ export default {
   justify-content: space-between;
 }
 
-.contact_button 
+.contact_button {
   display: flex;
   align-items: center;
   padding: 0.5rem 2.25rem;
