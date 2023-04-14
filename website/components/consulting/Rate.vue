@@ -1,6 +1,7 @@
 <template>
   <div class="container">
     <h2>Rate</h2>
+    <a href="mailto:siarhei.semiankou@gmail.com">Contact me for rate information</a>
     <table>
       <thead>
         <tr>
