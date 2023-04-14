@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h2>Rate</h2>
-    <button class="contact_button primary_button" @click="sendEmail">
+    <button class="contact_button" @click="sendEmail">
       Contact me for rate information
     </button>
   </div>
@@ -31,8 +31,27 @@ export default {
   justify-content: space-between;
 }
 
-.contact_button {
+.contact_button 
+  display: flex;
+  align-items: center;
+  padding: 0.5rem 2.25rem;
+  background-color: #1A2FEE;
+  margin-right: 1.5rem;
+  border-radius: 10px;
+  text-decoration: none;
+  box-shadow: 0px 4px 30px #BCBEFF;
+  justify-content: center;
 
+  font-family: Prompt;
+  font-style: normal;
+  font-weight: normal;
+  font-size: 16px;
+  line-height: 30px;
+  /* identical to box height, or 187% */
+
+  color: #FFFDFD;
+
+  cursor: pointer;
 }
 
 h2 {
