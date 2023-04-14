@@ -1,21 +1,9 @@
 <template>
   <div class="container">
     <h2>Rate</h2>
-    <a href="mailto:siarhei.semiankou@gmail.com">Contact me for rate information</a>
-    <table>
-      <thead>
-        <tr>
-          <td />
-          <td>Rate</td>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="rate in rates" :key="rate.desc">
-          <td>{{ rate.desc }}</td>
-          <td>US ${{ rate.rate }} / hour</td>
-        </tr>
-      </tbody>
-    </table>
+    <button class="contact_button primary_button" @click="sendEmail">
+      Contact me for rate information
+    </button>
   </div>
 </template>
 
@@ -27,11 +15,26 @@ export default {
     return {
       rates: rates.rates
     }
+  },
+  methods: {
+    sendEmail() {
+      window.location = "mailto:siarhei.semiankou@gmail.com";
+    }
   }
 }
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.contact_button {
+
+}
+
 h2 {
   font-family: Prompt;
   font-style: normal;
