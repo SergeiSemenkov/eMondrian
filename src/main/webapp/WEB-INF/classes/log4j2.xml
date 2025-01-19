@@ -1,14 +1,34 @@
 <Configuration>
     <Appenders>
-        <File name="FILE" fileName="${sys:catalina.home}/logs/mondrian.log" append="false">
+        <RollingRandomAccessFile name="FILE" fileName="${sys:catalina.home}/logs/mondrian.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
-        </File>
-        <File name="MDXLOG" fileName="${sys:catalina.home}/logs/mondrian-mdx.log" append="false">
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+            <DirectWriteRolloverStrategy>
+                <Delete basePath="${sys:catalina.home}/logs">
+                    <IfLastModified age="P15D"/>
+                </Delete>
+            </DirectWriteRolloverStrategy>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="MDXLOG" fileName="${sys:catalina.home}/logs/mondrian-mdx.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-mdx-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
-        </File>
-        <File name="SQLLOG" fileName="${sys:catalina.home}/logs/mondrian-sql.log" append="false">
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
+        <RollingRandomAccessFile name="SQLLOG" fileName="${sys:catalina.home}/logs/mondrian-sql.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-sql-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
-        </File>
+            <Policies>
+                <TimeBasedTriggeringPolicy/>
+                <SizeBasedTriggeringPolicy size="10 MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingRandomAccessFile>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
         </Console>
