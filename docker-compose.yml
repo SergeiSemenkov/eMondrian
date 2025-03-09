@@ -1,0 +1,35 @@
+version: '3.8'
+services:
+  client:
+    image: emondrian/webui:0.1
+    container_name: webui
+    platform: linux/amd64
+    restart: unless-stopped
+    depends_on:
+      - emondrian_server
+    ports:
+      - "5120:80"
+
+  emondrian_server:
+    image: emondrian/emondrian
+    container_name: emondrian_server
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5121:8080"
+
+  schema_editor:
+    image: emondrian/schema-editor:0.0.1
+    container_name: schema_editor
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5122:8080"
+
+  pivot_grid:
+    image: emondrian/webolapclient:0.0.1
+    container_name: pivot_grid
+    platform: linux/amd64
+    restart: unless-stopped
+    ports:
+      - "5123:80"
