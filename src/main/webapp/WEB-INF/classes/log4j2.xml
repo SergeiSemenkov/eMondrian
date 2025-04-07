@@ -1,6 +1,6 @@
 <Configuration>
     <Appenders>
-        <RollingRandomAccessFile name="FILE" fileName="${sys:catalina.home}/logs/mondrian.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-%d{MM-dd-yyyy}-%i.log">
+        <RollingRandomAccessFile name="FILE" fileName="${sys:catalina.home}/logs/mondrian.log" append="true" filePattern="${sys:catalina.home}/logs/mondrian-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -13,7 +13,7 @@
                 </Delete>
             </DirectWriteRolloverStrategy>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="MDXLOG" fileName="${sys:catalina.home}/logs/mondrian-mdx.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-mdx-%d{MM-dd-yyyy}-%i.log">
+        <RollingRandomAccessFile name="MDXLOG" fileName="${sys:catalina.home}/logs/mondrian-mdx.log" append="true" filePattern="${sys:catalina.home}/logs/mondrian-mdx-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
@@ -21,7 +21,7 @@
             </Policies>
             <DefaultRolloverStrategy max="10"/>
         </RollingRandomAccessFile>
-        <RollingRandomAccessFile name="SQLLOG" fileName="${sys:catalina.home}/logs/mondrian-sql.log" append="false" filePattern="${sys:catalina.home}/logs/mondrian-sql-%d{MM-dd-yyyy}-%i.log">
+        <RollingRandomAccessFile name="SQLLOG" fileName="${sys:catalina.home}/logs/mondrian-sql.log" append="true" filePattern="${sys:catalina.home}/logs/mondrian-sql-%d{MM-dd-yyyy}-%i.log">
             <PatternLayout pattern="%d %-5p [%c] %m%n"/>
             <Policies>
                 <TimeBasedTriggeringPolicy/>
