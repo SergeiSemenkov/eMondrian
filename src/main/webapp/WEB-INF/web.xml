@@ -35,9 +35,19 @@
   </filter-mapping>
 
   <servlet>
+    <servlet-name>metrics</servlet-name>
+    <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>metrics</servlet-name>
+    <url-pattern>/metrics</url-pattern>
+  </servlet-mapping>
+
+  <servlet>
     <servlet-name>MondrianXmlaServlet</servlet-name>
     <description>
-      MondrianXmlaServlet. 
+      MondrianXmlaServlet.
       Provides a XML/A (XML for Analysis) interface to the Mondrian (R)OLAP engine.
     </description>
 
