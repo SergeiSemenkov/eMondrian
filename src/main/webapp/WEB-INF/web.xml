@@ -34,6 +34,10 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
 
+  <listener>
+    <listener-class>mondrian.metrics.MetricsInitializer</listener-class>
+  </listener>
+
   <servlet>
     <servlet-name>metrics</servlet-name>
     <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
