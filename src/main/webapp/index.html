@@ -1,59 +1,60 @@
 ﻿<!doctype html>
 <html>
-  <head>
+<head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>eMondrian</title>
-  </head>
-  <body>
-    <h1>eMondrian</h1>
-    <p>
-      eMondrian is a distribution of the Mondrian (R)OLAP engine version.
-      The main feature of this version is support of ADOMD.NET and Excel clients.
-    </p>
-    <p>
-      This package contains: 
-      <ul>
-        <li>eMondrian Binaries</li>
-        <li>Configuration files to deploy an eMondrian to a servlet container (like Tomcat, Jetty, etc.)</li>
-        <li>Sample databases</li>
-      </ul>
-    </p>
-    <h2>Schema Editor</h2>
-    <p>
+</head>
+<body>
+<h1>eMondrian</h1>
+<p>
+    eMondrian is a distribution of the Mondrian (R)OLAP engine version.
+    The main feature of this version is support of ADOMD.NET and Excel clients.
+</p>
+<p>
+    This package contains:
+<ul>
+    <li>eMondrian Binaries</li>
+    <li>Configuration files to deploy an eMondrian to a servlet container (like Tomcat, Jetty, etc.)</li>
+    <li>Sample databases</li>
+</ul>
+</p>
+<h2>Schema Editor</h2>
+<p>
     Use <a href="schema_editor">Schema Editor</a> to edit eMondrian schema file.
-    </p>
-    <h2>Connect Microsoft Excel to Mondrian Cube:</h2>
-     <p>
-      On Excel <b>DATA</b> tab select <b>From Other Sources</b> item and then select <b>From Analysis Services</b>. Enter 
-     </p>
-     <p>
-      <i>http://&ltyour_server_address&gt:8080/emondrian/xmla</i>
-     </p>
-     <p>
-      as Server name. <br>For example, 
-     </p>
-     <p>
-      <i>http://localhost:8080/emondrian/xmla</i>
-     </p>
-    <h2>Connect ADOMD.Net application to Mondrian Cube</h2>
-     <p>
-      To connect to mondrian from ADOMD.Net application you must use folowing connection string:
-     </p>
-     <p>
-      <i>Data Source=http://&ltyour_server_address&gt:8080/emondrian/xmla;</i>
-     </p>
-     <p>
-       For example:
-     </p>
-     <p>
-       <i>Data Source=http://localhost:8080/emondrian/xmla;</i>
-     </p>
-    <h2>Log Files</h2>
-    <ul>
-        <li><a href="logs/FILE">mondrian.log</a></li>
-        <li><a href="logs/MDXLOG">mondrian-mdx.log</a></li>
-        <li><a href="logs/SQLLOG">mondrian-sql.log</a></li>
-    </ul>
-
-  </body>
+</p>
+<h2>Connect Microsoft Excel to Mondrian Cube:</h2>
+<p>
+    On Excel <b>DATA</b> tab select <b>From Other Sources</b> item and then select <b>From Analysis Services</b>. Enter
+</p>
+<p>
+    <i>http://&ltyour_server_address&gt:8080/emondrian/xmla</i>
+</p>
+<p>
+    as Server name. <br>For example,
+</p>
+<p>
+    <i>http://localhost:8080/emondrian/xmla</i>
+</p>
+<h2>Connect ADOMD.Net application to Mondrian Cube</h2>
+<p>
+    To connect to mondrian from ADOMD.Net application you must use folowing connection string:
+</p>
+<p>
+    <i>Data Source=http://&ltyour_server_address&gt:8080/emondrian/xmla;</i>
+</p>
+<p>
+    For example:
+</p>
+<p>
+    <i>Data Source=http://localhost:8080/emondrian/xmla;</i>
+</p>
+<h2>Log Files</h2>
+<ul>
+    <li><a href="logs">list of files</a></li>
+    <li><a href="logs/FILE">mondrian.log</a></li>
+    <li><a href="logs/MDXLOG">mondrian-mdx.log</a></li>
+    <li><a href="logs/SQLLOG">mondrian-sql.log</a></li>
+</ul>
+<p>To view a particular log file, use the URL format: <code>logs?file="filename"</code>. Replace <code>filename</code> with the actual log file name you want to see.</p>
+</body>
 </html>
