@@ -121,7 +121,7 @@
 
   <servlet>
     <servlet-name>HealthCheckServlet</servlet-name>
-    <servlet-class>HealthCheckServlet</servlet-class>
+    <servlet-class>mondrian.util.HealthCheckServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>
