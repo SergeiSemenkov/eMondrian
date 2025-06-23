@@ -119,4 +119,14 @@
     <url-pattern>/logs/*</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>HealthCheckServlet</servlet-name>
+    <servlet-class>HealthCheckServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>HealthCheckServlet</servlet-name>
+    <url-pattern>/health</url-pattern>
+  </servlet-mapping>
+
 </web-app>
