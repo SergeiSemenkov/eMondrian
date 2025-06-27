@@ -30,11 +30,12 @@
     </dependency>
 
     <dependency>
-      <groupId>ru.yandex.clickhouse</groupId>
+      <groupId>com.clickhouse</groupId>
       <artifactId>clickhouse-jdbc</artifactId>
-      <version>0.3.2</version>
+      <version>0.8.2</version>
+      <classifier>shaded-all</classifier>
     </dependency>
-    
+
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
