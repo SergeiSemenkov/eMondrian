@@ -19,6 +19,7 @@
     <maven.compiler.target>1.7</maven.compiler.target>
     <node.version>v16.13.1</node.version>
     <npm.version>8.1.2</npm.version>
+    <antlr4.version>4.13.1</antlr4.version>
   </properties>
 
   <dependencies>
@@ -52,6 +53,12 @@
       <groupId>org.apache.tomcat</groupId>
       <artifactId>tomcat-catalina</artifactId>
       <version>7.0.21</version>
+    </dependency>
+
+    <dependency>
+      <groupId>org.antlr</groupId>
+      <artifactId>antlr4-runtime</artifactId>
+      <version>${antlr4.version}</version>
     </dependency>
 
   </dependencies>
