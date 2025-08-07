@@ -101,6 +101,12 @@
       <param-value>emondrian.CatalinaAuthenticationXmlaRequestCallback</param-value>
     </init-param>
 
+    <init-param>
+      <param-name>Callbacks</param-name>
+      <param-value>emondrian.ForwardedAuthenticationXmlaRequestCallback</param-value>
+    </init-param>
+
+
     -->
 
   </servlet>
