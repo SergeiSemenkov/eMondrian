@@ -8,10 +8,12 @@ LABEL org.opencontainers.image.version="1.0.0"
 # Clean default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
 
-# Copy WAR
-COPY target/emondrian.war /usr/local/tomcat/webapps/
-
-#COPY docker/context.xml /usr/local/tomcat/conf/context.xml
+# Copy and unpack WAR at build time
+COPY target/emondrian.war /tmp/emondrian.war
+RUN mkdir /usr/local/tomcat/webapps/emondrian \
+ && cd /usr/local/tomcat/webapps/emondrian \
+ && jar -xf /tmp/emondrian.war \
+ && rm /tmp/emondrian.war
 
 EXPOSE 8080
 
