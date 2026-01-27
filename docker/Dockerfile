@@ -17,4 +17,4 @@ RUN mkdir /usr/local/tomcat/webapps/emondrian \
 
 EXPOSE 8080
 
-HEALTHCHECK CMD curl -f http://localhost:8080/ || exit 1
+HEALTHCHECK CMD curl -f http://localhost:8080/emondrian || exit 1
