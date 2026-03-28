@@ -5,7 +5,7 @@ set -euo pipefail
 # Usage: ./build-and-push.sh
 # ----------------------------
 
-VERSION="10.0.12"
+VERSION="10.0.14"
 
 DOCKER_REPO="emondrian/emondrian"
 
