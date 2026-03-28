@@ -5,9 +5,15 @@ set -euo pipefail
 # Usage: ./build-and-push.sh
 # ----------------------------
 
-VERSION="1.0.0"
+VERSION="10.0.12"
 
 DOCKER_REPO="emondrian/emondrian"
+
+echo "Building Maven project..."
+mvn clean package -DskipTests
+
+echo "Copying emondrian.war to project folder..."
+cp target/emondrian.war ./emondrian.war
 
 echo "Building Docker image $DOCKER_REPO:$VERSION ..."
 
