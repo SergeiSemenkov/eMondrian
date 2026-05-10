@@ -17,6 +17,8 @@ cp target/emondrian.war ./emondrian.war
 
 echo "Building Docker image $DOCKER_REPO:$VERSION ..."
 
+sudo docker rmi "$DOCKER_REPO:$VERSION"
+
 sudo docker build -f docker/Dockerfile -t "$DOCKER_REPO:$VERSION" .
 
 sudo docker push "$DOCKER_REPO:$VERSION"
