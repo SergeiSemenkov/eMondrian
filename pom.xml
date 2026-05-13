@@ -6,7 +6,7 @@
 
   <groupId>com.mycompany.app</groupId>
   <artifactId>eMondrian</artifactId>
-  <version>10.0.16</version>
+  <version>10.0.17</version>
   <packaging>war</packaging>
 
   <name>eMondrian Maven Webapp</name>
@@ -15,8 +15,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
     <node.version>v16.13.1</node.version>
     <npm.version>8.1.2</npm.version>
     <antlr4.version>4.13.1</antlr4.version>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>mondrian</artifactId>
-      <version>9.3.0-emondrian.16</version>
+      <version>9.3.0-emondrian.17</version>
     </dependency>
 
     <dependency>
