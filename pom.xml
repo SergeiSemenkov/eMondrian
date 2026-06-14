@@ -6,7 +6,7 @@
 
   <groupId>com.mycompany.app</groupId>
   <artifactId>eMondrian</artifactId>
-  <version>10.0.17</version>
+  <version>10.0.18</version>
   <packaging>war</packaging>
 
   <name>eMondrian Maven Webapp</name>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>mondrian</artifactId>
-      <version>9.3.0-emondrian.17</version>
+      <version>9.3.0-emondrian.18</version>
     </dependency>
 
     <dependency>
