@@ -38,6 +38,10 @@
     <listener-class>mondrian.metrics.MetricsInitializer</listener-class>
   </listener>
 
+  <listener>
+    <listener-class>mondrian.xmla.MondrianModuleServletRegistrar</listener-class>
+  </listener>
+
   <servlet>
     <servlet-name>metrics</servlet-name>
     <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
