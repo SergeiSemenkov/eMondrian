@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
-<web-app 
-  xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+<web-app
+  xmlns="https://jakarta.ee/xml/ns/jakartaee"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
-                      http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
-  version="3.1"
+  xsi:schemaLocation="https://jakarta.ee/xml/ns/jakartaee
+                      https://jakarta.ee/xml/ns/jakartaee/web-app_6_0.xsd"
+  version="6.0"
   metadata-complete="true"
 >
 
@@ -28,6 +28,12 @@
       <param-name>cors.exposed.headers</param-name>
       <param-value>Access-Control-Allow-Origin,Access-Control-Allow-Methods</param-value>
     </init-param>
+    <!-- Required for async servlets mapped under /* (e.g. mcp's SSE endpoints,
+         registered by MondrianModuleServletRegistrar). Without this, any filter
+         in the chain lacking async-supported blocks request.startAsync() with
+         "A filter or servlet of the current chain does not support
+         asynchronous operations", regardless of the servlet's own setting. -->
+    <async-supported>true</async-supported>
   </filter>
   <filter-mapping>
     <filter-name>CorsFilter</filter-name>
@@ -44,7 +50,7 @@
 
   <servlet>
     <servlet-name>metrics</servlet-name>
-    <servlet-class>io.prometheus.client.exporter.MetricsServlet</servlet-class>
+    <servlet-class>io.prometheus.client.servlet.jakarta.exporter.MetricsServlet</servlet-class>
   </servlet>
 
   <servlet-mapping>

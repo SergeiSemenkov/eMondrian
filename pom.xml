@@ -6,7 +6,7 @@
 
   <groupId>com.mycompany.app</groupId>
   <artifactId>eMondrian</artifactId>
-  <version>10.0.21</version>
+  <version>10.0.22</version>
   <packaging>war</packaging>
 
   <name>eMondrian Maven Webapp</name>
@@ -15,8 +15,8 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.source>11</maven.compiler.source>
-    <maven.compiler.target>11</maven.compiler.target>
+    <maven.compiler.source>17</maven.compiler.source>
+    <maven.compiler.target>17</maven.compiler.target>
     <node.version>v16.13.1</node.version>
     <npm.version>8.1.2</npm.version>
     <antlr4.version>4.13.1</antlr4.version>
@@ -27,7 +27,18 @@
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>mondrian</artifactId>
-      <version>9.3.0-emondrian.21</version>
+      <version>9.3.0-emondrian.22</version>
+    </dependency>
+
+    <!-- Needed to compile emondrian.*XmlaRequestCallback (implements
+         mondrian.xmla.XmlaRequestCallback). provided: Tomcat 10.1.x supplies
+         this at runtime; mondrian's own dependency on it is provided-scope
+         too, so it isn't inherited transitively here. -->
+    <dependency>
+      <groupId>jakarta.servlet</groupId>
+      <artifactId>jakarta.servlet-api</artifactId>
+      <version>6.0.0</version>
+      <scope>provided</scope>
     </dependency>
 
     <dependency>
@@ -129,7 +140,7 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-war-plugin</artifactId>
-        <version>2.2</version>
+        <version>3.2.2</version>
         <configuration>
           <webResources>
             <resource>

@@ -1,9 +1,9 @@
-FROM tomcat:9.0.52
+FROM tomcat:10.1.57
 
 LABEL org.opencontainers.image.vendor="emondrian"
 LABEL org.opencontainers.image.authors="emondrian"
 LABEL org.opencontainers.image.title="emondrian"
-LABEL org.opencontainers.image.version="10.0.21"
+LABEL org.opencontainers.image.version="10.0.22"
 
 # Clean default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
@@ -17,4 +17,6 @@ RUN mkdir /usr/local/tomcat/webapps/emondrian \
 
 EXPOSE 8080
 
-HEALTHCHECK CMD curl -f http://localhost:8080/emondrian || exit 1
+# tomcat:10.1.57 is a JRE-slim image with neither curl nor wget, so the
+# healthcheck uses bash's /dev/tcp instead of relying on either being present.
+HEALTHCHECK CMD bash -c 'exec 3<>/dev/tcp/localhost/8080 && printf "GET /emondrian HTTP/1.0\r\n\r\n" >&3 && head -1 <&3 | grep -qE "HTTP/1\.[01] [0-9]{3}"'
