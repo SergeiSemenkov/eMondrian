@@ -6,7 +6,7 @@
 
   <groupId>com.mycompany.app</groupId>
   <artifactId>eMondrian</artifactId>
-  <version>10.0.22</version>
+  <version>10.0.23</version>
   <packaging>war</packaging>
 
   <name>eMondrian Maven Webapp</name>
@@ -27,7 +27,7 @@
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>mondrian</artifactId>
-      <version>9.3.0-emondrian.22</version>
+      <version>9.3.0-emondrian.23</version>
     </dependency>
 
     <!-- Needed to compile emondrian.*XmlaRequestCallback (implements
