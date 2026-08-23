@@ -1,5 +1,48 @@
-<?xml version="1.0"?>
 <Schema name="FoodMart">
+<View alias="store_d">
+  <SQL dialect="generic">
+<![CDATA[ 
+ select * from "store" left join "employee" on "store"."store_id" = "employee"."store_id" 
+ ]]>
+</SQL>
+  </View>
+<!-- Flattening views for the attribute model.
+     A DimensionAttribute's KeyColumn names one column in one table, so a
+     dimension built from a <Join> (or needing a SQL expression) cannot be
+     expressed with attributes. Flatten it here first, then point the
+     dimension's table= at the view alias. -->
+<View alias="product_d">
+  <SQL dialect="generic">
+<![CDATA[
+select
+  "p".*,
+  "pc"."product_subcategory" "product_subcategory",
+  "pc"."product_category" "product_category",
+  "pc"."product_department" "product_department",
+  "pc"."product_family" "product_family"
+from "product" "p"
+inner join "product_class" "pc" on "p"."product_class_id" = "pc"."product_class_id"
+]]>
+</SQL>
+  </View>
+<View alias="employee_d">
+  <SQL dialect="generic">
+<![CDATA[ 
+select
+"pay_type" "pay_type",
+"employee_id" "employee_id",
+"supervisor_id" "supervisor_id",
+"full_name" "full_name",
+"management_role" "management_role",
+"position_title" "position_title"
+from "employee"
+left join "position" on "employee"."position_id" = "position"."position_id"
+ ]]>
+</SQL>
+  </View>
+
+
+
 <!--
   == This software is subject to the terms of the Eclipse Public License v1.0
   == Agreement, available at the following URL:
@@ -14,9 +57,64 @@
 
 <!-- Shared dimensions -->
 
-  <Dimension name="Store">
+  <Dimension name="Store" table="store">
+    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="store_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Country">
+      <KeyColumn dataType="String" columnName="store_country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store State">
+      <KeyColumn dataType="String" columnName="store_state"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store City">
+      <KeyColumn dataType="String" columnName="store_city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Name">
+      <KeyColumn dataType="String" columnName="store_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Manager" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_manager"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="store_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Grocery Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="grocery_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Frozen Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="frozen_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Meat Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="meat_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Has coffee bar" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Boolean" columnName="coffee_bar"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Street address" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_street_address"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Country" uniqueMembers="true" sourceAttribute="Store Country"/>
+      <Level name="Store State" uniqueMembers="true" sourceAttribute="Store State"/>
+      <Level name="Store City" uniqueMembers="false" sourceAttribute="Store City"/>
+      <Level name="Store Name" uniqueMembers="true" sourceAttribute="Store Name">
+        <Property name="Store Type" sourceAttribute="Store Type"/>
+        <Property name="Store Manager" sourceAttribute="Store Manager"/>
+        <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
+        <Property name="Grocery Sqft" sourceAttribute="Grocery Sqft"/>
+        <Property name="Frozen Sqft" sourceAttribute="Frozen Sqft"/>
+        <Property name="Meat Sqft" sourceAttribute="Meat Sqft"/>
+        <Property name="Has coffee bar" sourceAttribute="Has coffee bar"/>
+        <Property name="Street address" sourceAttribute="Street address"/>
+      </Level>
+    </Hierarchy>
+  </Dimension><Dimension name="Store_my">
     <Hierarchy hasAll="true" primaryKey="store_id">
-      <Table name="store"/>
+      <Table name="store_my"/>
       <Level name="Store Country" column="store_country" uniqueMembers="true"/>
       <Level name="Store State" column="store_state" uniqueMembers="true"/>
       <Level name="Store City" column="store_city" uniqueMembers="false"/>
@@ -33,133 +131,118 @@
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Store Size in SQFT">
-    <Hierarchy hasAll="true" primaryKey="store_id">
-      <Table name="store"/>
-      <Level name="Store Sqft" column="store_sqft" type="Numeric" uniqueMembers="true"/>
+  <Dimension name="Store Size in SQFT" table="store">
+    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="store_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Sqft">
+      <KeyColumn dataType="Numeric" columnName="store_sqft"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Sqft" uniqueMembers="true" sourceAttribute="Store Sqft"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Store Type">
-    <Hierarchy hasAll="true" primaryKey="store_id">
-      <Table name="store"/>
-      <Level name="Store Type" column="store_type" uniqueMembers="true"/>
+  <Dimension name="Store Type" table="store">
+    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="store_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Time" type="TimeDimension">
-    <Hierarchy hasAll="false" primaryKey="time_id">
-      <Table name="time_by_day"/>
-      <Level name="Year" column="the_year" type="Numeric" uniqueMembers="true"
-          levelType="TimeYears"/>
-      <Level name="Quarter" column="quarter" uniqueMembers="false"
-          levelType="TimeQuarters"/>
-      <Level name="Month" column="month_of_year" uniqueMembers="false" type="Numeric"
-          levelType="TimeMonths"/>
+  <Dimension name="Time" type="TimeDimension" table="time_by_day">
+    <DimensionAttribute name="Time Id" usage="Key" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="time_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Year" levelType="TimeYears">
+      <KeyColumn dataType="Numeric" columnName="the_year"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Quarter" levelType="TimeQuarters">
+      <KeyColumn dataType="String" columnName="quarter"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Month" levelType="TimeMonths">
+      <KeyColumn dataType="Numeric" columnName="month_of_year"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Week" levelType="TimeWeeks">
+      <KeyColumn dataType="Numeric" columnName="week_of_year"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Day" levelType="TimeDays">
+      <KeyColumn dataType="Numeric" columnName="day_of_month"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="false">
+      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Quarter" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
+      <Level name="Month" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
     </Hierarchy>
-    <Hierarchy hasAll="true" name="Weekly" primaryKey="time_id">
-      <Table name="time_by_day"/>
-      <Level name="Year" column="the_year" type="Numeric" uniqueMembers="true"
-          levelType="TimeYears"/>
-      <Level name="Week" column="week_of_year" type="Numeric" uniqueMembers="false"
-          levelType="TimeWeeks"/>
-      <Level name="Day" column="day_of_month" uniqueMembers="false" type="Numeric"
-          levelType="TimeDays"/>
-    </Hierarchy>
-  </Dimension>
-
-  <Dimension name="Product">
-    <Hierarchy hasAll="true" primaryKey="product_id" primaryKeyTable="product">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-<!--
-      <Query>
-        <SQL dialect="generic">
-SELECT *
-FROM "product", "product_class"
-WHERE "product"."product_class_id" = "product_class"."product_class_id"
-        </SQL>
-      </Query>
-      <Level name="Product Family" column="product_family" uniqueMembers="true"/>
-      <Level name="Product Department" column="product_department" uniqueMembers="false"/>
-      <Level name="Product Category" column="product_category" uniqueMembers="false"/>
-      <Level name="Product Subcategory" column="product_subcategory" uniqueMembers="false"/>
-      <Level name="Brand Name" column="brand_name" uniqueMembers="false"/>
-      <Level name="Product Name" column="product_name" uniqueMembers="true"/>
--->
-      <Level name="Product Family" table="product_class" column="product_family"
-          uniqueMembers="true"/>
-      <Level name="Product Department" table="product_class" column="product_department"
-          uniqueMembers="false"/>
-      <Level name="Product Category" table="product_class" column="product_category"
-          uniqueMembers="false"/>
-      <Level name="Product Subcategory" table="product_class" column="product_subcategory"
-          uniqueMembers="false"/>
-      <Level name="Brand Name" table="product" column="brand_name" uniqueMembers="false"/>
-      <Level name="Product Name" table="product" column="product_name"
-          uniqueMembers="true"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Product Family" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Product Family" table="product_class" column="product_family"
-          uniqueMembers="true"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Product Department" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Product Department" table="product_class" column="product_department"
-          uniqueMembers="false"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Product Category" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Product Category" table="product_class" column="product_category"
-          uniqueMembers="false"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Product Subcategory" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Product Subcategory" table="product_class" column="product_subcategory"
-          uniqueMembers="false"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Brand Name" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Brand Name" table="product" column="brand_name" uniqueMembers="false"/>
-    </Hierarchy>
-    <Hierarchy hasAll="true" name="Product Name" primaryKey="product_id" primaryKeyTable="product" displayFolder="Details">
-      <Join leftKey="product_class_id" rightKey="product_class_id">
-        <Table name="product"/>
-        <Table name="product_class"/>
-      </Join>
-      <Level name="Product Name" table="product" column="product_name"
-          uniqueMembers="true"/>
+    <Hierarchy hasAll="true" name="Weekly">
+      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Week" uniqueMembers="false" levelType="TimeWeeks" sourceAttribute="Week"/>
+      <Level name="Day" uniqueMembers="false" levelType="TimeDays" sourceAttribute="Day"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Warehouse">
-    <Hierarchy hasAll="true" primaryKey="warehouse_id">
-      <Table name="warehouse"/>
-      <Level name="Country" column="warehouse_country" uniqueMembers="true"/>
-      <Level name="State Province" column="warehouse_state_province"
-          uniqueMembers="true"/>
-      <Level name="City" column="warehouse_city" uniqueMembers="false"/>
-      <Level name="Warehouse Name" column="warehouse_name" uniqueMembers="true"/>
+  <Dimension name="Product" table="product_d">
+    <DimensionAttribute name="Product Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="product_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Family" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="product_family"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Department" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="product_department"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Category" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="product_category"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Subcategory" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="product_subcategory"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Brand Name" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="brand_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Name" attributeHierarchyDisplayFolder="Details">
+      <KeyColumn dataType="String" columnName="product_name"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Product Family" uniqueMembers="true" sourceAttribute="Product Family"/>
+      <Level name="Product Department" uniqueMembers="false" sourceAttribute="Product Department"/>
+      <Level name="Product Category" uniqueMembers="false" sourceAttribute="Product Category"/>
+      <Level name="Product Subcategory" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
+      <Level name="Brand Name" uniqueMembers="false" sourceAttribute="Brand Name"/>
+      <Level name="Product Name" uniqueMembers="true" sourceAttribute="Product Name"/>
     </Hierarchy>
   </Dimension>
+
+  <Dimension name="Warehouse" table="warehouse">
+    <DimensionAttribute name="Warehouse Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="warehouse_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Country">
+      <KeyColumn dataType="String" columnName="warehouse_country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="State Province">
+      <KeyColumn dataType="String" columnName="warehouse_state_province"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="City">
+      <KeyColumn dataType="String" columnName="warehouse_city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Warehouse Name">
+      <KeyColumn dataType="String" columnName="warehouse_name"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Warehouse Name" uniqueMembers="true" sourceAttribute="Warehouse Name"/>
+    </Hierarchy>
+  </Dimension>
+
+  
 
 <!-- Sales -->
 <Cube name="Sales" defaultMeasure="Unit Sales">
@@ -180,179 +263,152 @@ WHERE "product"."product_class_id" = "product_class"."product_class_id"
     <AggExclude name="agg_pl_01_sales_fact_1997" />
     <AggExclude name="agg_l_05_sales_fact_1997" />
 -->
-    <AggExclude name="agg_c_special_sales_fact_1997" />
+    <AggExclude name="agg_c_special_sales_fact_1997"/>
 <!--
     <AggExclude name="agg_c_14_sales_fact_1997" />
 -->
-    <AggExclude name="agg_lc_100_sales_fact_1997" />
-    <AggExclude name="agg_lc_10_sales_fact_1997" />
-    <AggExclude name="agg_pc_10_sales_fact_1997" />
+    <AggExclude name="agg_lc_100_sales_fact_1997"/>
+    <AggExclude name="agg_lc_10_sales_fact_1997"/>
+    <AggExclude name="agg_pc_10_sales_fact_1997"/>
     <AggName name="agg_c_special_sales_fact_1997">
         <AggFactCount column="FACT_COUNT"/>
         <AggIgnoreColumn column="foo"/>
         <AggIgnoreColumn column="bar"/>
-        <AggForeignKey factColumn="product_id" aggColumn="PRODUCT_ID" />
-        <AggForeignKey factColumn="customer_id" aggColumn="CUSTOMER_ID" />
-        <AggForeignKey factColumn="promotion_id" aggColumn="PROMOTION_ID" />
-        <AggForeignKey factColumn="store_id" aggColumn="STORE_ID" />
+        <AggForeignKey factColumn="product_id" aggColumn="PRODUCT_ID"/>
+        <AggForeignKey factColumn="customer_id" aggColumn="CUSTOMER_ID"/>
+        <AggForeignKey factColumn="promotion_id" aggColumn="PROMOTION_ID"/>
+        <AggForeignKey factColumn="store_id" aggColumn="STORE_ID"/>
 <!--
         <AggMeasure name="[Measures].[Avg Unit Sales]" column="UNIT_SALES_AVG"/>
 -->
-        <AggMeasure name="[Measures].[Unit Sales]" column="UNIT_SALES_SUM" />
-        <AggMeasure name="[Measures].[Store Cost]" column="STORE_COST_SUM" />
-        <AggMeasure name="[Measures].[Store Sales]" column="STORE_SALES_SUM" />
-        <AggLevel name="[Time].[Year]" column="TIME_YEAR" />
-        <AggLevel name="[Time].[Quarter]" column="TIME_QUARTER" />
-        <AggLevel name="[Time].[Month]" column="TIME_MONTH" />
+        <AggMeasure name="[Measures].[Unit Sales]" column="UNIT_SALES_SUM"/>
+        <AggMeasure name="[Measures].[Store Cost]" column="STORE_COST_SUM"/>
+        <AggMeasure name="[Measures].[Store Sales]" column="STORE_SALES_SUM"/>
+        <AggLevel name="[Time].[Year]" column="TIME_YEAR"/>
+        <AggLevel name="[Time].[Quarter]" column="TIME_QUARTER"/>
+        <AggLevel name="[Time].[Month]" column="TIME_MONTH"/>
     </AggName>
   </Table>
 
   <DimensionUsage name="Store" source="Store" foreignKey="store_id"/>
-  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT"
-      foreignKey="store_id"/>
+  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT" foreignKey="store_id"/>
   <DimensionUsage name="Store Type" source="Store Type" foreignKey="store_id"/>
   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
   <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
-  <Dimension name="Promotion Media" foreignKey="promotion_id">
-    <Hierarchy hasAll="true" allMemberName="All Media" primaryKey="promotion_id" defaultMember="All Media">
-      <Table name="promotion"/>
-      <Level name="Media Type" column="media_type" uniqueMembers="true"/>
+  <Dimension name="Promotion Media" foreignKey="promotion_id" table="promotion">
+    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="promotion_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Media Type">
+      <KeyColumn dataType="String" columnName="media_type"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Media" defaultMember="All Media">
+      <Level name="Media Type" uniqueMembers="true" sourceAttribute="Media Type"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Promotions" foreignKey="promotion_id">
-    <Hierarchy hasAll="true" allMemberName="All Promotions" primaryKey="promotion_id" defaultMember="[All Promotions]">
-      <Table name="promotion"/>
-      <Level name="Promotion Name" column="promotion_name" uniqueMembers="true"/>
+  <Dimension name="Promotions" foreignKey="promotion_id" table="promotion">
+    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="promotion_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Promotion Name">
+      <KeyColumn dataType="String" columnName="promotion_name"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Promotions" defaultMember="[All Promotions]">
+      <Level name="Promotion Name" uniqueMembers="true" sourceAttribute="Promotion Name"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Customers" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Customers" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Country" column="country" uniqueMembers="true"/>
-      <Level name="State Province" column="state_province" uniqueMembers="true"/>
-      <Level name="City" column="city" uniqueMembers="false"/>
-      <Level name="Name" column="customer_id" type="Numeric" uniqueMembers="true">
-        <NameExpression>
-          <SQL dialect="oracle">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="hive">
-`customer`.`fullname`
-          </SQL>
-          <SQL dialect="hsqldb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="access">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="postgres">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="mysql">
-CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)
-          </SQL>
-          <SQL dialect="mssql">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="derby">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="db2">
-CONCAT(CONCAT("customer"."fname", ' '), "customer"."lname")
-          </SQL>
-          <SQL dialect="luciddb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="neoview">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="teradata">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="generic">
-fullname
-          </SQL>
-        </NameExpression>
-        <OrdinalExpression>
-          <SQL dialect="oracle">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="hsqldb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="access">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="postgres">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="mysql">
-CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)
-          </SQL>
-          <SQL dialect="mssql">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="neoview">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="derby">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="db2">
-CONCAT(CONCAT("customer"."fname", ' '), "customer"."lname")
-          </SQL>
-          <SQL dialect="luciddb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="generic">
-fullname
-          </SQL>
-        </OrdinalExpression>
-        <Property name="Gender" column="gender"/>
-        <Property name="Marital Status" column="marital_status"/>
-        <Property name="Education" column="education"/>
-        <Property name="Yearly Income" column="yearly_income"/>
+  <Dimension name="Customers" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Country">
+      <KeyColumn dataType="String" columnName="country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="State Province">
+      <KeyColumn dataType="String" columnName="state_province"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="City">
+      <KeyColumn dataType="String" columnName="city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Name">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+      <OrderByColumn dataType="String" columnName="fullname"/>
+      <NameColumn dataType="String" columnName="fullname"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="gender"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="marital_status"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Education" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="education"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="yearly_income"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Customers">
+      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Name" uniqueMembers="true" nameColumn="fullname" sourceAttribute="Name">
+        <Property name="Gender" sourceAttribute="Gender"/>
+        <Property name="Marital Status" sourceAttribute="Marital Status"/>
+        <Property name="Education" sourceAttribute="Education"/>
+        <Property name="Yearly Income" sourceAttribute="Yearly Income"/>
       </Level>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Education Level" foreignKey="customer_id">
-    <Hierarchy hasAll="true" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Education Level" column="education" uniqueMembers="true"/>
+  <Dimension name="Education Level" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Education Level" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="education"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Education Level" uniqueMembers="true" sourceAttribute="Education Level"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Gender" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Gender" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Gender" column="gender" uniqueMembers="true"/>
+  <Dimension name="Gender" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="gender"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Gender">
+      <Level name="Gender" uniqueMembers="true" sourceAttribute="Gender"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Marital Status" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Marital Status" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Marital Status" column="marital_status" uniqueMembers="true" approxRowCount="111"/>
+  <Dimension name="Marital Status" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="marital_status"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Marital Status">
+      <Level name="Marital Status" uniqueMembers="true" approxRowCount="111" sourceAttribute="Marital Status"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Yearly Income" foreignKey="customer_id">
-    <Hierarchy hasAll="true" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Yearly Income" column="yearly_income" uniqueMembers="true"/>
+  <Dimension name="Yearly Income" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="yearly_income"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Yearly Income" uniqueMembers="true" sourceAttribute="Yearly Income"/>
     </Hierarchy>
   </Dimension>
 
-  <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
-      formatString="Standard"
-      displayFolder=""/>
-  <Measure name="Store Cost" column="store_cost" aggregator="sum"
-      formatString="#,###.00"
-      displayFolder="Store"/>
-  <Measure name="Store Sales" column="store_sales" aggregator="sum"
-      formatString="#,###.00" 
-      displayFolder="Store"/>
-  <Measure name="Sales Count" column="product_id" aggregator="count"
-      formatString="#,###"/>
-  <Measure name="Customer Count" column="customer_id"
-      aggregator="distinct-count" formatString="#,###"/>
+  <Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard" displayFolder=""/>
+  <Measure name="Store Cost" column="store_cost" aggregator="sum" formatString="#,###.00" displayFolder="Store"/>
+  <Measure name="Store Sales" column="store_sales" aggregator="sum" formatString="#,###.00" displayFolder="Store"/>
+  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,###"/>
+  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,###"/>
   <Measure name="Promotion Sales" aggregator="sum" formatString="#,###.00">
     <MeasureExpression>
       <SQL dialect="access">
@@ -395,34 +451,17 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   </Measure>
 
         
-  <CalculatedMember
-      name="Profit"
-      dimension="Measures">
+  <CalculatedMember name="Profit" dimension="Measures">
     <Formula>[Measures].[Store Sales] - [Measures].[Store Cost]</Formula>
     <CalculatedMemberProperty name="FORMAT_STRING" value="$#,##0.00"/>
   </CalculatedMember>
-  <CalculatedMember
-      name="Profit last Period"
-      dimension="Measures"
-      formula="COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit])"
-      visible="false">
+  <CalculatedMember name="Profit last Period" dimension="Measures" formula="COALESCEEMPTY((Measures.[Profit], [Time].[Time].PREVMEMBER),    Measures.[Profit])" visible="false">
     <CalculatedMemberProperty name="FORMAT_STRING" value="$#,##0.00"/>
     <CalculatedMemberProperty name="MEMBER_ORDINAL" value="18"/>
   </CalculatedMember>
-  <CalculatedMember
-      name="Profit Growth"
-      dimension="Measures"
-      formula="([Measures].[Profit] - [Measures].[Profit last Period]) / [Measures].[Profit last Period]"
-      visible="true"
-      caption="Gewinn-Wachstum">
+  <CalculatedMember name="Profit Growth" dimension="Measures" formula="([Measures].[Profit] - [Measures].[Profit last Period]) / [Measures].[Profit last Period]" visible="true" caption="Gewinn-Wachstum">
   </CalculatedMember>
-  <CalculatedMember
-      name="Store Sales / 1000"
-      dimension="Measures"
-      formula="[Measures].[Store Sales] / 1000"
-      visible="true"
-      displayFolder="Store\Calculation"
-      formatString="#,###.00">
+  <CalculatedMember name="Store Sales / 1000" dimension="Measures" formula="[Measures].[Store Sales] / 1000" visible="true" displayFolder="Store\Calculation" formatString="#,###.00">
     <CalculatedMemberProperty name="FORMAT_STRING" value="0.0%"/>
   </CalculatedMember>
   <NamedSet name="Top 10 Customers">
@@ -434,11 +473,43 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <Table name="inventory_fact_1997"/>
 
   <DimensionUsage name="Store" source="Store" foreignKey="store_id"/>
-  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT"
-      foreignKey="store_id"/>
+  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT" foreignKey="store_id"/>
   <DimensionUsage name="Store Type" source="Store Type" foreignKey="store_id"/>
   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
-  <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
+  <!-- Attribute-based Product, over the product_d flattening view.
+       Demonstrates a <Join> dimension converted to attributes: the join lives
+       in the view, so every KeyColumn names one column of one table. -->
+  <Dimension name="Product" foreignKey="product_id" table="product_d">
+    <DimensionAttribute name="Product Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="product_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Family">
+      <KeyColumn dataType="String" columnName="product_family"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Department">
+      <KeyColumn dataType="String" columnName="product_department"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Category">
+      <KeyColumn dataType="String" columnName="product_category"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Subcategory">
+      <KeyColumn dataType="String" columnName="product_subcategory"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Brand Name">
+      <KeyColumn dataType="String" columnName="brand_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Product Name">
+      <KeyColumn dataType="String" columnName="product_name"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Product Family" uniqueMembers="true" sourceAttribute="Product Family"/>
+      <Level name="Product Department" uniqueMembers="false" sourceAttribute="Product Department"/>
+      <Level name="Product Category" uniqueMembers="false" sourceAttribute="Product Category"/>
+      <Level name="Product Subcategory" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
+      <Level name="Brand Name" uniqueMembers="false" sourceAttribute="Brand Name"/>
+      <Level name="Product Name" uniqueMembers="true" sourceAttribute="Product Name"/>
+    </Hierarchy>
+  </Dimension>
   <DimensionUsage name="Warehouse" source="Warehouse" foreignKey="warehouse_id"/>
 
   <Measure name="Store Invoice" column="store_invoice" aggregator="sum"/>
@@ -456,13 +527,11 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
 `warehouse_sales` - `inventory_fact_1997`.`warehouse_cost`
       </SQL>
       <SQL dialect="generic">
-&quot;warehouse_sales&quot; - &quot;inventory_fact_1997&quot;.&quot;warehouse_cost&quot;
+"warehouse_sales" - "inventory_fact_1997"."warehouse_cost"
       </SQL>
     </MeasureExpression>
   </Measure>
-  <CalculatedMember
-      name="Average Warehouse Sale"
-      dimension="Measures">
+  <CalculatedMember name="Average Warehouse Sale" dimension="Measures">
     <Formula>[Measures].[Warehouse Sales] / [Measures].[Warehouse Cost]</Formula>
     <CalculatedMemberProperty name="FORMAT_STRING" value="$#,##0.00"/>
   </CalculatedMember>
@@ -477,26 +546,29 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <!-- We could have used the shared dimension "Store Type", but we
      want to test private dimensions without primary key. -->
   <Dimension name="Store Type">
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Type" column="store_type" uniqueMembers="true"/>
+      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
   <!-- We don't have to specify primary key or foreign key since the shared
      dimension "Store" has the same underlying table as the cube. -->
-  <DimensionUsage name="Store" source="Store"/>
+  <DimensionUsage name="Store" source="Store" foreignKey="store_id"/>
 
   <Dimension name="Has coffee bar">
+    <DimensionAttribute name="Has coffee bar" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Boolean" columnName="coffee_bar"/>
+    </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Has coffee bar" column="coffee_bar" uniqueMembers="true"
-          type="Boolean"/>
+      <Level name="Has coffee bar" uniqueMembers="true" sourceAttribute="Has coffee bar"/>
     </Hierarchy>
   </Dimension>
 
-  <Measure name="Store Sqft" column="store_sqft" aggregator="sum"
-      formatString="#,###"/>
-  <Measure name="Grocery Sqft" column="grocery_sqft" aggregator="sum"
-      formatString="#,###"/>
+  <Measure name="Store Sqft" column="store_sqft" aggregator="sum" formatString="#,###"/>
+  <Measure name="Grocery Sqft" column="grocery_sqft" aggregator="sum" formatString="#,###"/>
 
 </Cube>
 
@@ -504,121 +576,179 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <Table name="salary"/>
   <!-- Use private "Time" dimension because key is different than public
      "Time" dimension. -->
-  <Dimension name="Time" type="TimeDimension" foreignKey="pay_date">
-    <Hierarchy hasAll="false" primaryKey="the_date">
-      <Table name="time_by_day"/>
-      <Level name="Year" column="the_year" type="Numeric" uniqueMembers="true"
-          levelType="TimeYears"/>
-      <Level name="Quarter" column="quarter" uniqueMembers="false"
-          levelType="TimeQuarters"/>
+  <Dimension name="Time" type="TimeDimension" foreignKey="pay_date" table="time_by_day">
+    <DimensionAttribute name="Date" usage="Key" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Date" columnName="the_date"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Year" levelType="TimeYears">
+      <KeyColumn dataType="Numeric" columnName="the_year"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Quarter" levelType="TimeQuarters">
+      <KeyColumn dataType="String" columnName="quarter"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Month" levelType="TimeMonths">
+      <KeyColumn dataType="Numeric" columnName="month_of_year"/>
+      <NameColumn dataType="String" columnName="the_month"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="false">
+      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Quarter" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
       <!-- Use the_month as source for the name, so members look like
            [Time].[1997].[Q1].[Jan] rather than [Time].[1997].[Q1].[1]. -->
-      <Level name="Month" column="month_of_year" nameColumn="the_month"
-          uniqueMembers="false" type="Numeric" levelType="TimeMonths"/>
+      <Level name="Month" nameColumn="the_month" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Store" foreignKey="employee_id" >
-    <Hierarchy hasAll="true" primaryKey="employee_id"
-        primaryKeyTable="employee">
-      <Join leftKey="store_id" rightKey="store_id">
-        <Table name="employee"/>
-        <Table name="store"/>
-      </Join>
-      <Level name="Store Country" table="store" column="store_country"
-          uniqueMembers="true"/>
-      <Level name="Store State" table="store" column="store_state"
-          uniqueMembers="true"/>
-      <Level name="Store City" table="store" column="store_city"
-          uniqueMembers="false"/>
-      <Level name="Store Name" table="store" column="store_name"
-          uniqueMembers="true">
-        <Property name="Store Type" column="store_type"/>
-        <Property name="Store Manager" column="store_manager"/>
-        <Property name="Store Sqft" column="store_sqft" type="Numeric"/>
-        <Property name="Grocery Sqft" column="grocery_sqft" type="Numeric"/>
-        <Property name="Frozen Sqft" column="frozen_sqft" type="Numeric"/>
-        <Property name="Meat Sqft" column="meat_sqft" type="Numeric"/>
-        <Property name="Has coffee bar" column="coffee_bar" type="Boolean"/>
-        <Property name="Street address" column="store_street_address"
-            type="String"/>
+  <Dimension name="Store" foreignKey="employee_id" table="store_d">
+    <DimensionAttribute name="Store Key" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="employee_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Country">
+      <KeyColumn dataType="String" columnName="store_country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store State">
+      <KeyColumn dataType="String" columnName="store_state"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store City">
+      <KeyColumn dataType="String" columnName="store_city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Name">
+      <KeyColumn dataType="String" columnName="store_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Manager" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_manager"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="store_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Grocery Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="grocery_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Frozen Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="frozen_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Meat Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="meat_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Has coffee bar" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Boolean" columnName="coffee_bar"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Street address" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_street_address"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Country" uniqueMembers="true" sourceAttribute="Store Country"/>
+      <Level name="Store State" uniqueMembers="true" sourceAttribute="Store State"/>
+      <Level name="Store City" uniqueMembers="false" sourceAttribute="Store City"/>
+      <Level name="Store Name" uniqueMembers="true" sourceAttribute="Store Name">
+        <Property name="Store Type" sourceAttribute="Store Type"/>
+        <Property name="Store Manager" sourceAttribute="Store Manager"/>
+        <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
+        <Property name="Grocery Sqft" sourceAttribute="Grocery Sqft"/>
+        <Property name="Frozen Sqft" sourceAttribute="Frozen Sqft"/>
+        <Property name="Meat Sqft" sourceAttribute="Meat Sqft"/>
+        <Property name="Has coffee bar" sourceAttribute="Has coffee bar"/>
+        <Property name="Street address" sourceAttribute="Street address"/>
       </Level>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Pay Type" foreignKey="employee_id">
-    <Hierarchy hasAll="true" primaryKey="employee_id"
-        primaryKeyTable="employee">
-      <Join leftKey="position_id" rightKey="position_id">
-        <Table name="employee"/>
-        <Table name="position"/>
-      </Join>
-      <Level name="Pay Type" table="position" column="pay_type"
-          uniqueMembers="true"/>
+  <Dimension name="Pay Type" foreignKey="employee_id" table="employee_d">
+    <DimensionAttribute name="Employee Key" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="employee_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Pay Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="pay_type"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Pay Type" uniqueMembers="true" sourceAttribute="Pay Type"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Store Type" foreignKey="employee_id">
-    <Hierarchy hasAll="true" primaryKeyTable="employee" primaryKey="employee_id">
-      <Join leftKey="store_id" rightKey="store_id">
-        <Table name="employee"/>
-        <Table name="store"/>
-      </Join>
-      <Level name="Store Type" table="store" column="store_type"
-          uniqueMembers="true"/>
+  <Dimension name="Store Type" foreignKey="employee_id" table="store_d">
+    <DimensionAttribute name="Store Key" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="employee_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Position" foreignKey="employee_id">
-    <Hierarchy hasAll="true" allMemberName="All Position"
-        primaryKey="employee_id">
-      <Table name="employee"/>
-      <Level name="Management Role" uniqueMembers="true"
-          column="management_role"/>
-      <Level name="Position Title" uniqueMembers="false"
-          column="position_title" ordinalColumn="position_id"/>
+  <Dimension name="Position" foreignKey="employee_id" table="employee">
+    <DimensionAttribute name="Employee Key" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="employee_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Management Role">
+      <KeyColumn dataType="String" columnName="management_role"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Position Title">
+      <KeyColumn dataType="String" columnName="position_title"/>
+      <OrderByColumn dataType="Numeric" columnName="position_id"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Position">
+      <Level name="Management Role" uniqueMembers="true" sourceAttribute="Management Role"/>
+      <Level name="Position Title" uniqueMembers="false" sourceAttribute="Position Title"/>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Department" foreignKey="department_id">
-    <Hierarchy hasAll="true" primaryKey="department_id">
-      <Table name="department"/>
-      <Level name="Department Description" type="Numeric" uniqueMembers="true"
-          column="department_id"/>
+  <Dimension name="Department" foreignKey="department_id" table="department">
+    <DimensionAttribute name="Department Description" usage="Key">
+      <KeyColumn dataType="Numeric" columnName="department_id"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Department Description" uniqueMembers="true" sourceAttribute="Department Description"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Employees" foreignKey="employee_id">
-    <Hierarchy hasAll="true" allMemberName="All Employees"
-        primaryKey="employee_id">
-      <Table name="employee"/>
-      <Level name="Employee Id" type="Numeric" uniqueMembers="true"
-          column="employee_id" parentColumn="supervisor_id"
-          nameColumn="full_name" nullParentValue="0">
+
+  <Dimension name="Employees" foreignKey="employee_id" table="employee">
+    <DimensionAttribute name="Employee Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="employee_id"/>
+      <NameColumn dataType="String" columnName="full_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="marital_status"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Position Title" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="position_title"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="gender"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Salary" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="salary"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Education Level" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="education_level"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Management Role" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="management_role"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Employees">
+      <Level name="Employee Id" uniqueMembers="true" parentColumn="supervisor_id" nameColumn="full_name" nullParentValue="0" sourceAttribute="Employee Id">
         <Closure parentColumn="supervisor_id" childColumn="employee_id">
           <Table name="employee_closure"/>
         </Closure>
-        <Property name="Marital Status" column="marital_status"/>
-        <Property name="Position Title" column="position_title"/>
-        <Property name="Gender" column="gender"/>
-        <Property name="Salary" column="salary"/>
-        <Property name="Education Level" column="education_level"/>
-        <Property name="Management Role" column="management_role"/>
+        <Property name="Marital Status" sourceAttribute="Marital Status"/>
+        <Property name="Position Title" sourceAttribute="Position Title"/>
+        <Property name="Gender" sourceAttribute="Gender"/>
+        <Property name="Salary" sourceAttribute="Salary"/>
+        <Property name="Education Level" sourceAttribute="Education Level"/>
+        <Property name="Management Role" sourceAttribute="Management Role"/>
       </Level>
     </Hierarchy>
   </Dimension>
 
-  <Measure name="Org Salary" column="salary_paid" aggregator="sum"
-      formatString="Currency"/>
-  <Measure name="Count" column="employee_id" aggregator="count"
-      formatString="#,#"/>
-  <Measure name="Number of Employees" column="employee_id"
-      aggregator="distinct-count" formatString="#,#"/>
-  <CalculatedMember name="Employee Salary" dimension="Measures"
-      formatString="Currency"
-      formula="([Employees].currentmember.datamember, [Measures].[Org Salary])"/>
-  <CalculatedMember name="Avg Salary" dimension="Measures"
-      formatString="Currency"
-      formula="[Measures].[Org Salary]/[Measures].[Number of Employees]"/>
+  <Measure name="Org Salary" column="salary_paid" aggregator="sum" formatString="Currency"/>
+  <Measure name="Count" column="employee_id" aggregator="count" formatString="#,#"/>
+  <Measure name="Number of Employees" column="employee_id" aggregator="distinct-count" formatString="#,#"/>
+  <CalculatedMember name="Employee Salary" dimension="Measures" formatString="Currency" formula="([Employees].currentmember.datamember, [Measures].[Org Salary])"/>
+  <CalculatedMember name="Avg Salary" dimension="Measures" formatString="Currency" formula="[Measures].[Org Salary]/[Measures].[Number of Employees]"/>
 </Cube>
 
 <!-- Cube with one ragged hierarchy (otherwise the same as the "Sales"
@@ -628,141 +758,198 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     <AggExclude name="agg_pc_10_sales_fact_1997"/>
     <AggExclude name="agg_lc_10_sales_fact_1997"/>
   </Table>
-  <Dimension name="Store" foreignKey="store_id">
-    <Hierarchy hasAll="true" primaryKey="store_id">
-      <Table name="store_ragged"/>
-      <Level name="Store Country" column="store_country" uniqueMembers="true"
-          hideMemberIf="Never"/>
-      <Level name="Store State" column="store_state" uniqueMembers="true"
-          hideMemberIf="IfParentsName"/>
-      <Level name="Store City" column="store_city" uniqueMembers="false"
-          hideMemberIf="IfBlankName"/>
-      <Level name="Store Name" column="store_name" uniqueMembers="true"
-          hideMemberIf="Never">
-        <Property name="Store Type" column="store_type"/>
-        <Property name="Store Manager" column="store_manager"/>
-        <Property name="Store Sqft" column="store_sqft" type="Numeric"/>
-        <Property name="Grocery Sqft" column="grocery_sqft" type="Numeric"/>
-        <Property name="Frozen Sqft" column="frozen_sqft" type="Numeric"/>
-        <Property name="Meat Sqft" column="meat_sqft" type="Numeric"/>
-        <Property name="Has coffee bar" column="coffee_bar" type="Boolean"/>
-        <Property name="Street address" column="store_street_address" type="String"/>
+  <Dimension name="Store" foreignKey="store_id" table="store_ragged">
+    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="store_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Country">
+      <KeyColumn dataType="String" columnName="store_country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store State">
+      <KeyColumn dataType="String" columnName="store_state"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store City">
+      <KeyColumn dataType="String" columnName="store_city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Name">
+      <KeyColumn dataType="String" columnName="store_name"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_type"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Manager" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_manager"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Store Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="store_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Grocery Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="grocery_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Frozen Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="frozen_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Meat Sqft" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Numeric" columnName="meat_sqft"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Has coffee bar" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="Boolean" columnName="coffee_bar"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Street address" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="store_street_address"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Store Country" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Country"/>
+      <Level name="Store State" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="Store State"/>
+      <Level name="Store City" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="Store City"/>
+      <Level name="Store Name" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Name">
+        <Property name="Store Type" sourceAttribute="Store Type"/>
+        <Property name="Store Manager" sourceAttribute="Store Manager"/>
+        <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
+        <Property name="Grocery Sqft" sourceAttribute="Grocery Sqft"/>
+        <Property name="Frozen Sqft" sourceAttribute="Frozen Sqft"/>
+        <Property name="Meat Sqft" sourceAttribute="Meat Sqft"/>
+        <Property name="Has coffee bar" sourceAttribute="Has coffee bar"/>
+        <Property name="Street address" sourceAttribute="Street address"/>
       </Level>
     </Hierarchy>
   </Dimension>
 
-  <Dimension name="Geography" foreignKey="store_id">
-    <Hierarchy hasAll="true" primaryKey="store_id">
-      <Table name="store_ragged"/>
-      <Level name="Country" column="store_country" uniqueMembers="true"
-          hideMemberIf="Never"/>
-      <Level name="State" column="store_state" uniqueMembers="true"
-          hideMemberIf="IfParentsName"/>
-      <Level name="City" column="store_city" uniqueMembers="false"
-          hideMemberIf="IfBlankName"/>
+  <Dimension name="Geography" foreignKey="store_id" table="store_ragged">
+    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Integer" columnName="store_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Country">
+      <KeyColumn dataType="String" columnName="store_country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="State">
+      <KeyColumn dataType="String" columnName="store_state"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="City">
+      <KeyColumn dataType="String" columnName="store_city"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Country" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Country"/>
+      <Level name="State" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="State"/>
+      <Level name="City" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="City"/>
     </Hierarchy>
   </Dimension>
 
-  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT"
-      foreignKey="store_id"/>
+  <DimensionUsage name="Store Size in SQFT" source="Store Size in SQFT" foreignKey="store_id"/>
   <DimensionUsage name="Store Type" source="Store Type" foreignKey="store_id"/>
   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
   <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
-  <Dimension name="Promotion Media" foreignKey="promotion_id">
-    <Hierarchy hasAll="true" allMemberName="All Media" primaryKey="promotion_id">
-      <Table name="promotion"/>
-      <Level name="Media Type" column="media_type" uniqueMembers="true"/>
+  <Dimension name="Promotion Media" foreignKey="promotion_id" table="promotion">
+    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="promotion_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Media Type">
+      <KeyColumn dataType="String" columnName="media_type"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Media">
+      <Level name="Media Type" uniqueMembers="true" sourceAttribute="Media Type"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Promotions" foreignKey="promotion_id">
-    <Hierarchy hasAll="true" allMemberName="All Promotions" primaryKey="promotion_id">
-      <Table name="promotion"/>
-      <Level name="Promotion Name" column="promotion_name" uniqueMembers="true"/>
+  <Dimension name="Promotions" foreignKey="promotion_id" table="promotion">
+    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="promotion_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Promotion Name">
+      <KeyColumn dataType="String" columnName="promotion_name"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Promotions">
+      <Level name="Promotion Name" uniqueMembers="true" sourceAttribute="Promotion Name"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Customers" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Customers" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Country" column="country" uniqueMembers="true"/>
-      <Level name="State Province" column="state_province" uniqueMembers="true"/>
-      <Level name="City" column="city" uniqueMembers="false"/>
-      <Level name="Name" uniqueMembers="true">
-        <KeyExpression>
-          <SQL dialect="oracle">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="hsqldb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="access">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="postgres">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="mysql">
-CONCAT(`customer`.`fname`, ' ', `customer`.`lname`)
-          </SQL>
-          <SQL dialect="mssql">
-fname + ' ' + lname
-          </SQL>
-          <SQL dialect="derby">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="db2">
-CONCAT(CONCAT("customer"."fname", ' '), "customer"."lname")
-          </SQL>
-          <SQL dialect="luciddb">
-"fname" || ' ' || "lname"
-          </SQL>
-          <SQL dialect="neoview">
-"customer"."fullname"
-          </SQL>
-          <SQL dialect="generic">
-fullname
-          </SQL>
-        </KeyExpression>
-        <Property name="Gender" column="gender"/>
-        <Property name="Marital Status" column="marital_status"/>
-        <Property name="Education" column="education"/>
-        <Property name="Yearly Income" column="yearly_income"/>
+  <Dimension name="Customers" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Country">
+      <KeyColumn dataType="String" columnName="country"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="State Province">
+      <KeyColumn dataType="String" columnName="state_province"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="City">
+      <KeyColumn dataType="String" columnName="city"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Name">
+      <KeyColumn dataType="String" columnName="fullname"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="gender"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="marital_status"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Education" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="education"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="yearly_income"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Customers">
+      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Name" uniqueMembers="true" sourceAttribute="Name">
+        <Property name="Gender" sourceAttribute="Gender"/>
+        <Property name="Marital Status" sourceAttribute="Marital Status"/>
+        <Property name="Education" sourceAttribute="Education"/>
+        <Property name="Yearly Income" sourceAttribute="Yearly Income"/>
       </Level>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Education Level" foreignKey="customer_id">
-    <Hierarchy hasAll="true" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Education Level" column="education" uniqueMembers="true"/>
+  <Dimension name="Education Level" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Education Level" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="education"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Education Level" uniqueMembers="true" sourceAttribute="Education Level"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Gender" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Gender" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Gender" column="gender" uniqueMembers="true"/>
+  <Dimension name="Gender" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="gender"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Gender">
+      <Level name="Gender" uniqueMembers="true" sourceAttribute="Gender"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Marital Status" foreignKey="customer_id">
-    <Hierarchy hasAll="true" allMemberName="All Marital Status" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Marital Status" column="marital_status" uniqueMembers="true"/>
+  <Dimension name="Marital Status" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="marital_status"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true" allMemberName="All Marital Status">
+      <Level name="Marital Status" uniqueMembers="true" sourceAttribute="Marital Status"/>
     </Hierarchy>
   </Dimension>
-  <Dimension name="Yearly Income" foreignKey="customer_id">
-    <Hierarchy hasAll="true" primaryKey="customer_id">
-      <Table name="customer"/>
-      <Level name="Yearly Income" column="yearly_income" uniqueMembers="true"/>
+  <Dimension name="Yearly Income" foreignKey="customer_id" table="customer">
+    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+      <KeyColumn dataType="Numeric" columnName="customer_id"/>
+    </DimensionAttribute>
+    <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
+      <KeyColumn dataType="String" columnName="yearly_income"/>
+    </DimensionAttribute>
+    <Hierarchy hasAll="true">
+      <Level name="Yearly Income" uniqueMembers="true" sourceAttribute="Yearly Income"/>
     </Hierarchy>
   </Dimension>
-  <Measure name="Unit Sales" column="unit_sales" aggregator="sum"
-      formatString="Standard"/>
-  <Measure name="Store Cost" column="store_cost" aggregator="sum"
-      formatString="#,###.00"/>
-  <Measure name="Store Sales" column="store_sales" aggregator="sum"
-      formatString="#,###.00"/>
-  <Measure name="Sales Count" column="product_id" aggregator="count"
-      formatString="#,###"/>
-  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count"
-      formatString="#,###"/>
+  <Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard"/>
+  <Measure name="Store Cost" column="store_cost" aggregator="sum" formatString="#,###.00"/>
+  <Measure name="Store Sales" column="store_sales" aggregator="sum" formatString="#,###.00"/>
+  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,###"/>
+  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,###"/>
 </Cube>
 
 <VirtualCube name="Warehouse and Sales" defaultMeasure="Store Sales">
@@ -770,11 +957,11 @@ fullname
   <VirtualCubeDimension cubeName="Sales" name="Education Level"/>
   <VirtualCubeDimension cubeName="Sales" name="Gender"/>
   <VirtualCubeDimension cubeName="Sales" name="Marital Status"/>
-  <VirtualCubeDimension name="Product"/>
+  <VirtualCubeDimension cubeName="Sales" name="Product"/>
   <VirtualCubeDimension cubeName="Sales" name="Promotion Media"/>
   <VirtualCubeDimension cubeName="Sales" name="Promotions"/>
-  <VirtualCubeDimension name="Store"/>
-  <VirtualCubeDimension name="Time"/>
+  <VirtualCubeDimension cubeName="Sales" name="Store"/>
+  <VirtualCubeDimension cubeName="Sales" name="Time"/>
   <VirtualCubeDimension cubeName="Sales" name="Yearly Income"/>
   <VirtualCubeDimension cubeName="Warehouse" name="Warehouse"/>
   <VirtualCubeMeasure cubeName="Sales" name="[Measures].[Sales Count]"/>
