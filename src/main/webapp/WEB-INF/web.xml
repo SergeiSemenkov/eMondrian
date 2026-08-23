@@ -104,20 +104,28 @@
     -->
 
     <!--
-    Callbacks separated with ;
+      Establishes the caller's identity for role matching: the authenticated
+      user name and their groups are put on the request, and mondrian.server.
+      ServerPermissions matches them against the schema's <Role>/<RoleMember>
+      elements. Without a callback every request is anonymous and resolves to
+      the schema's defaultRole.
 
+      Several callbacks may be listed, separated with ";".
+
+      CatalinaAuthenticationXmlaRequestCallback reads the container's own
+      authenticated principal, so it is inert until a realm and a
+      <security-constraint> are configured, which is why it is safe to enable
+      by default.
+
+      ForwardedAuthenticationXmlaRequestCallback instead trusts the
+      X-Forwarded-User / X-Forwarded-Groups headers. Only enable it behind a
+      reverse proxy that *overwrites* those headers; if any client can set them,
+      it can name itself any user it likes.
+    -->
     <init-param>
       <param-name>Callbacks</param-name>
       <param-value>emondrian.CatalinaAuthenticationXmlaRequestCallback</param-value>
     </init-param>
-
-    <init-param>
-      <param-name>Callbacks</param-name>
-      <param-value>emondrian.ForwardedAuthenticationXmlaRequestCallback</param-value>
-    </init-param>
-
-
-    -->
 
   </servlet>
 

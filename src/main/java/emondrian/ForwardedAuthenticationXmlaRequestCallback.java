@@ -23,8 +23,16 @@ public class ForwardedAuthenticationXmlaRequestCallback implements XmlaRequestCa
             HttpServletResponse response,
             Map<String, Object> context) {
 
-        context.put(mondrian.xmla.XmlaConstants.CONTEXT_XMLA_AUTHENTICATED_USER, request.getHeader("X-Forwarded-User"));
-        context.put(mondrian.xmla.XmlaConstants.CONTEXT_XMLA_AUTHENTICATED_USER_GROUPS, request.getHeader("X-Forwarded-Groups"));
+        context.put(
+                mondrian.xmla.XmlaConstants.CONTEXT_XMLA_AUTHENTICATED_USER,
+                request.getHeader("X-Forwarded-User"));
+        // DefaultXmlaServlet reads this back as a String[], so the
+        // comma-separated header has to be split here rather than passed
+        // through whole.
+        context.put(
+                mondrian.xmla.XmlaConstants.CONTEXT_XMLA_AUTHENTICATED_USER_GROUPS,
+                mondrian.server.ServerPermissions.splitGroups(
+                        request.getHeader("X-Forwarded-Groups")));
 
         return true;
     }
