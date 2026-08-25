@@ -27,7 +27,7 @@
     <dependency>
       <groupId>pentaho</groupId>
       <artifactId>mondrian</artifactId>
-      <version>9.3.0-emondrian.29</version>
+      <version>9.3.0-emondrian.30</version>
     </dependency>
 
     <!-- Needed to compile emondrian.*XmlaRequestCallback (implements
