@@ -467,6 +467,26 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <NamedSet name="Top 10 Customers">
     <Formula>Head(Order([Customers].[Customers].[Name].AllMembers, [Measures].[Profit], DESC), 10)</Formula>
   </NamedSet>
+  <!-- Example drillthrough action, attribute-based: a store performance
+       audit, pairing store-operations attributes with the sales measures
+       they explain. Store Manager/Store Type/Store Sqft/Has coffee bar are
+       all DimensionAttributes with attributeHierarchyEnabled="false", so
+       none has a hierarchy/level of its own; each can only be reached as a
+       drillthrough column via sourceAttribute="...". This is the approach to
+       use for new/attribute-based cubes; DrillThroughAttribute's older
+       dimension="..." hierarchy="..." level="..." form still works but is
+       obsolete, kept only so schemas that already use it keep loading
+       unchanged. -->
+  <DrillThroughAction name="Store Drillthrough" default="true">
+    <DrillThroughAttribute name="Store Manager" dimension="Store" sourceAttribute="Store Manager"/>
+    <DrillThroughAttribute name="Store Type" dimension="Store" sourceAttribute="Store Type"/>
+    <DrillThroughAttribute name="Store Sqft" dimension="Store" sourceAttribute="Store Sqft"/>
+    <DrillThroughAttribute name="Has coffee bar" dimension="Store" sourceAttribute="Has coffee bar"/>
+    <DrillThroughMeasure name="Unit Sales" measure="Unit Sales"/>
+    <DrillThroughMeasure name="Store Sales" measure="Store Sales"/>
+    <DrillThroughMeasure name="Store Cost" measure="Store Cost"/>
+    <DrillThroughMeasure name="Sales Count" measure="Sales Count"/>
+  </DrillThroughAction>
 </Cube>
 
 <Cube name="Warehouse">
