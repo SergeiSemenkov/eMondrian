@@ -710,6 +710,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     <DimensionAttribute name="Employee Id" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="employee_id"/>
       <NameColumn dataType="String" columnName="full_name"/>
+      <ParentColumn dataType="Numeric" columnName="supervisor_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="marital_status"/>
@@ -730,7 +731,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="management_role"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Employees">
-      <Level name="Employee Id" uniqueMembers="true" parentColumn="supervisor_id" nameColumn="full_name" nullParentValue="0" sourceAttribute="Employee Id">
+      <Level name="Employee Id" uniqueMembers="true" nameColumn="full_name" nullParentValue="0" sourceAttribute="Employee Id">
         <Closure parentColumn="supervisor_id" childColumn="employee_id">
           <Table name="employee_closure"/>
         </Closure>
