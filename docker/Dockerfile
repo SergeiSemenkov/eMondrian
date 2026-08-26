@@ -3,7 +3,7 @@ FROM tomcat:10.1.57
 LABEL org.opencontainers.image.vendor="emondrian"
 LABEL org.opencontainers.image.authors="emondrian"
 LABEL org.opencontainers.image.title="emondrian"
-LABEL org.opencontainers.image.version="10.0.36"
+LABEL org.opencontainers.image.version="10.0.37"
 
 # Clean default apps
 RUN rm -rf /usr/local/tomcat/webapps/*
