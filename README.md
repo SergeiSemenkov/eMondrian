@@ -1,3 +1,14 @@
+> **eMondrian has moved.** The new version works with Excel, AI agents (MCP) and Power BI (preview) and runs with Docker in minutes.
+>
+> - Website: **[emondrian.com](https://emondrian.com)**
+> - Source code: **[github.com/eMondrian/emondrian-community](https://github.com/eMondrian/emondrian-community)**
+> - Documentation: **[docs.emondrian.com](https://docs.emondrian.com)**
+> - Consulting and support: **[BIS](https://bisolutions.dev)** · contact@bisolutions.dev
+>
+> This repository contains an older version and is no longer actively developed.
+
+---
+
 # eMondrian
 eMondrian is a free (R)OLAP server. It is a version of the Mondrian.
 
