@@ -3,6 +3,7 @@
 > - Website: **[emondrian.com](https://emondrian.com)**
 > - Source code: **[github.com/eMondrian/emondrian-community](https://github.com/eMondrian/emondrian-community)**
 > - Documentation: **[docs.emondrian.com](https://docs.emondrian.com)**
+> - What's new: **[Power BI and AI agents on your own semantic model](https://dev.to/sergeisemenkov/the-new-emondrian-power-bi-and-ai-agents-on-your-own-semantic-model-4nap)**
 > - Consulting and support: **[BIS](https://bisolutions.dev)** · contact@bisolutions.dev
 >
 > This repository contains an older version and is no longer actively developed.
