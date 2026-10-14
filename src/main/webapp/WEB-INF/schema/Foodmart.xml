@@ -1,4 +1,24 @@
 <Schema name="FoodMart">
+
+<!-- estimatedCount / approxRowCount on the elements below are measured member counts, taken on
+     2026-10-14 from the engine's own MDSCHEMA_LEVELS LEVEL_CARDINALITY and spot-checked against
+     the ClickHouse foodmart database. Without them Mondrian runs
+     "select count(*) from (select distinct &lt;level keys&gt;)" per level once per schema load and
+     again after every member-cache flush, and MDSCHEMA_LEVELS plus CHILDREN_CARDINALITY make it
+     materialize a whole level just to size it.
+
+     An attribute's estimatedCount is distinct over its own key column. A Hierarchy Level's
+     approxRowCount is what the engine itself counts: the level key plus every ancestor key up to
+     and including the first unique one (SqlMemberSource.makeLevelMemberCountSql), which is why
+     Time/Quarter is 8 and not 4, and Product/Brand Name is 512 while the Brand Name attribute is
+     111.
+
+     Two deliberate gaps: an attribute with attributeHierarchyEnabled="false" has no level to
+     size, and the Employees parent-child level is left alone (see the comment there). Err high
+     if these go stale: too high keeps Mondrian constraining member queries and keeps
+     Aggregation.optimizePredicates from dropping a constraint it believes covers a whole level,
+     while too low invites both. -->
+
 <View alias="store_d">
   <SQL dialect="generic">
 <![CDATA[ 
@@ -58,19 +78,19 @@ left join "position" on "employee"."position_id" = "position"."position_id"
 <!-- Shared dimensions -->
 
   <Dimension name="Store" table="store">
-    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Id" estimatedCount="25" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="store_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Country">
+    <DimensionAttribute name="Store Country" estimatedCount="3">
       <KeyColumn dataType="String" columnName="store_country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store State">
+    <DimensionAttribute name="Store State" estimatedCount="10">
       <KeyColumn dataType="String" columnName="store_state"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store City">
+    <DimensionAttribute name="Store City" estimatedCount="24">
       <KeyColumn dataType="String" columnName="store_city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Name">
+    <DimensionAttribute name="Store Name" estimatedCount="25">
       <KeyColumn dataType="String" columnName="store_name"/>
     </DimensionAttribute>
     <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
@@ -98,10 +118,10 @@ left join "position" on "employee"."position_id" = "position"."position_id"
       <KeyColumn dataType="String" columnName="store_street_address"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Country" uniqueMembers="true" sourceAttribute="Store Country"/>
-      <Level name="Store State" uniqueMembers="true" sourceAttribute="Store State"/>
-      <Level name="Store City" uniqueMembers="false" sourceAttribute="Store City"/>
-      <Level name="Store Name" uniqueMembers="true" sourceAttribute="Store Name">
+      <Level name="Store Country" approxRowCount="3" uniqueMembers="true" sourceAttribute="Store Country"/>
+      <Level name="Store State" approxRowCount="10" uniqueMembers="true" sourceAttribute="Store State"/>
+      <Level name="Store City" approxRowCount="24" uniqueMembers="false" sourceAttribute="Store City"/>
+      <Level name="Store Name" approxRowCount="25" uniqueMembers="true" sourceAttribute="Store Name">
         <Property name="Store Type" sourceAttribute="Store Type"/>
         <Property name="Store Manager" sourceAttribute="Store Manager"/>
         <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
@@ -132,26 +152,26 @@ left join "position" on "employee"."position_id" = "position"."position_id"
   </Dimension>
 
   <Dimension name="Store Size in SQFT" table="store">
-    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Id" estimatedCount="25" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="store_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Sqft">
+    <DimensionAttribute name="Store Sqft" estimatedCount="21">
       <KeyColumn dataType="Numeric" columnName="store_sqft"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Sqft" uniqueMembers="true" sourceAttribute="Store Sqft"/>
+      <Level name="Store Sqft" approxRowCount="21" uniqueMembers="true" sourceAttribute="Store Sqft"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Store Type" table="store">
-    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Id" estimatedCount="25" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="store_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="store_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
+      <Level name="Store Type" approxRowCount="6" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
@@ -159,86 +179,86 @@ left join "position" on "employee"."position_id" = "position"."position_id"
     <DimensionAttribute name="Time Id" usage="Key" attributeHierarchyEnabled="false">
       <KeyColumn dataType="Numeric" columnName="time_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Year" levelType="TimeYears">
+    <DimensionAttribute name="Year" estimatedCount="2" levelType="TimeYears">
       <KeyColumn dataType="Numeric" columnName="the_year"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Quarter" levelType="TimeQuarters">
+    <DimensionAttribute name="Quarter" estimatedCount="4" levelType="TimeQuarters">
       <KeyColumn dataType="String" columnName="quarter"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Month" levelType="TimeMonths">
+    <DimensionAttribute name="Month" estimatedCount="12" levelType="TimeMonths">
       <KeyColumn dataType="Numeric" columnName="month_of_year"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Week" levelType="TimeWeeks">
+    <DimensionAttribute name="Week" estimatedCount="52" levelType="TimeWeeks">
       <KeyColumn dataType="Numeric" columnName="week_of_year"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Day" levelType="TimeDays">
+    <DimensionAttribute name="Day" estimatedCount="31" levelType="TimeDays">
       <KeyColumn dataType="Numeric" columnName="day_of_month"/>
     </DimensionAttribute>
     <Hierarchy hasAll="false">
-      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
-      <Level name="Quarter" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
-      <Level name="Month" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
+      <Level name="Year" approxRowCount="2" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Quarter" approxRowCount="8" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
+      <Level name="Month" approxRowCount="24" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
     </Hierarchy>
     <Hierarchy hasAll="true" name="Weekly">
-      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
-      <Level name="Week" uniqueMembers="false" levelType="TimeWeeks" sourceAttribute="Week"/>
-      <Level name="Day" uniqueMembers="false" levelType="TimeDays" sourceAttribute="Day"/>
+      <Level name="Year" approxRowCount="2" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Week" approxRowCount="104" uniqueMembers="false" levelType="TimeWeeks" sourceAttribute="Week"/>
+      <Level name="Day" approxRowCount="730" uniqueMembers="false" levelType="TimeDays" sourceAttribute="Day"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Product" table="product_d">
-    <DimensionAttribute name="Product Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Product Id" estimatedCount="1560" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="product_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Family" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Product Family" estimatedCount="3" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="product_family"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Department" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Product Department" estimatedCount="22" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="product_department"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Category" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Product Category" estimatedCount="45" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="product_category"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Subcategory" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Product Subcategory" estimatedCount="102" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="product_subcategory"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Brand Name" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Brand Name" estimatedCount="111" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="brand_name"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Name" attributeHierarchyDisplayFolder="Details">
+    <DimensionAttribute name="Product Name" estimatedCount="1560" attributeHierarchyDisplayFolder="Details">
       <KeyColumn dataType="String" columnName="product_name"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Product Family" uniqueMembers="true" sourceAttribute="Product Family"/>
-      <Level name="Product Department" uniqueMembers="false" sourceAttribute="Product Department"/>
-      <Level name="Product Category" uniqueMembers="false" sourceAttribute="Product Category"/>
-      <Level name="Product Subcategory" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
-      <Level name="Brand Name" uniqueMembers="false" sourceAttribute="Brand Name"/>
-      <Level name="Product Name" uniqueMembers="true" sourceAttribute="Product Name"/>
+      <Level name="Product Family" approxRowCount="3" uniqueMembers="true" sourceAttribute="Product Family"/>
+      <Level name="Product Department" approxRowCount="23" uniqueMembers="false" sourceAttribute="Product Department"/>
+      <Level name="Product Category" approxRowCount="55" uniqueMembers="false" sourceAttribute="Product Category"/>
+      <Level name="Product Subcategory" approxRowCount="102" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
+      <Level name="Brand Name" approxRowCount="512" uniqueMembers="false" sourceAttribute="Brand Name"/>
+      <Level name="Product Name" approxRowCount="1560" uniqueMembers="true" sourceAttribute="Product Name"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Warehouse" table="warehouse">
-    <DimensionAttribute name="Warehouse Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Warehouse Id" estimatedCount="24" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="warehouse_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Country">
+    <DimensionAttribute name="Country" estimatedCount="3">
       <KeyColumn dataType="String" columnName="warehouse_country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="State Province">
+    <DimensionAttribute name="State Province" estimatedCount="10">
       <KeyColumn dataType="String" columnName="warehouse_state_province"/>
     </DimensionAttribute>
-    <DimensionAttribute name="City">
+    <DimensionAttribute name="City" estimatedCount="23">
       <KeyColumn dataType="String" columnName="warehouse_city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Warehouse Name">
+    <DimensionAttribute name="Warehouse Name" estimatedCount="24">
       <KeyColumn dataType="String" columnName="warehouse_name"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
-      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
-      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
-      <Level name="Warehouse Name" uniqueMembers="true" sourceAttribute="Warehouse Name"/>
+      <Level name="Country" approxRowCount="3" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" approxRowCount="10" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" approxRowCount="23" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Warehouse Name" approxRowCount="24" uniqueMembers="true" sourceAttribute="Warehouse Name"/>
     </Hierarchy>
   </Dimension>
 
@@ -296,41 +316,41 @@ left join "position" on "employee"."position_id" = "position"."position_id"
   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
   <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
   <Dimension name="Promotion Media" foreignKey="promotion_id" table="promotion">
-    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Promotion Id" estimatedCount="1864" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="promotion_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Media Type">
+    <DimensionAttribute name="Media Type" estimatedCount="14">
       <KeyColumn dataType="String" columnName="media_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Media" defaultMember="All Media">
-      <Level name="Media Type" uniqueMembers="true" sourceAttribute="Media Type"/>
+      <Level name="Media Type" approxRowCount="14" uniqueMembers="true" sourceAttribute="Media Type"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Promotions" foreignKey="promotion_id" table="promotion">
-    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Promotion Id" estimatedCount="1864" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="promotion_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Promotion Name">
+    <DimensionAttribute name="Promotion Name" estimatedCount="51">
       <KeyColumn dataType="String" columnName="promotion_name"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Promotions" defaultMember="[All Promotions]">
-      <Level name="Promotion Name" uniqueMembers="true" sourceAttribute="Promotion Name"/>
+      <Level name="Promotion Name" approxRowCount="51" uniqueMembers="true" sourceAttribute="Promotion Name"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Customers" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Country">
+    <DimensionAttribute name="Country" estimatedCount="3">
       <KeyColumn dataType="String" columnName="country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="State Province">
+    <DimensionAttribute name="State Province" estimatedCount="13">
       <KeyColumn dataType="String" columnName="state_province"/>
     </DimensionAttribute>
-    <DimensionAttribute name="City">
+    <DimensionAttribute name="City" estimatedCount="108">
       <KeyColumn dataType="String" columnName="city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Name">
+    <DimensionAttribute name="Name" estimatedCount="10281">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
       <OrderByColumn dataType="String" columnName="fullname"/>
       <NameColumn dataType="String" columnName="fullname"/>
@@ -348,10 +368,10 @@ left join "position" on "employee"."position_id" = "position"."position_id"
       <KeyColumn dataType="String" columnName="yearly_income"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Customers">
-      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
-      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
-      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
-      <Level name="Name" uniqueMembers="true" nameColumn="fullname" sourceAttribute="Name">
+      <Level name="Country" approxRowCount="3" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" approxRowCount="13" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" approxRowCount="109" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Name" approxRowCount="10281" uniqueMembers="true" nameColumn="fullname" sourceAttribute="Name">
         <Property name="Gender" sourceAttribute="Gender"/>
         <Property name="Marital Status" sourceAttribute="Marital Status"/>
         <Property name="Education" sourceAttribute="Education"/>
@@ -360,29 +380,29 @@ left join "position" on "employee"."position_id" = "position"."position_id"
     </Hierarchy>
   </Dimension>
   <Dimension name="Education Level" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Education Level" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="education"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Education Level" uniqueMembers="true" sourceAttribute="Education Level"/>
+      <Level name="Education Level" approxRowCount="5" uniqueMembers="true" sourceAttribute="Education Level"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Gender" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="gender"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Gender">
-      <Level name="Gender" uniqueMembers="true" sourceAttribute="Gender"/>
+      <Level name="Gender" approxRowCount="2" uniqueMembers="true" sourceAttribute="Gender"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Marital Status" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
@@ -393,14 +413,14 @@ left join "position" on "employee"."position_id" = "position"."position_id"
     </Hierarchy>
   </Dimension>
   <Dimension name="Yearly Income" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="yearly_income"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Yearly Income" uniqueMembers="true" sourceAttribute="Yearly Income"/>
+      <Level name="Yearly Income" approxRowCount="8" uniqueMembers="true" sourceAttribute="Yearly Income"/>
     </Hierarchy>
   </Dimension>
 
@@ -500,34 +520,34 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
        Demonstrates a <Join> dimension converted to attributes: the join lives
        in the view, so every KeyColumn names one column of one table. -->
   <Dimension name="Product" foreignKey="product_id" table="product_d">
-    <DimensionAttribute name="Product Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Product Id" estimatedCount="1560" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="product_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Family">
+    <DimensionAttribute name="Product Family" estimatedCount="3">
       <KeyColumn dataType="String" columnName="product_family"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Department">
+    <DimensionAttribute name="Product Department" estimatedCount="22">
       <KeyColumn dataType="String" columnName="product_department"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Category">
+    <DimensionAttribute name="Product Category" estimatedCount="45">
       <KeyColumn dataType="String" columnName="product_category"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Subcategory">
+    <DimensionAttribute name="Product Subcategory" estimatedCount="102">
       <KeyColumn dataType="String" columnName="product_subcategory"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Brand Name">
+    <DimensionAttribute name="Brand Name" estimatedCount="111">
       <KeyColumn dataType="String" columnName="brand_name"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Product Name">
+    <DimensionAttribute name="Product Name" estimatedCount="1560">
       <KeyColumn dataType="String" columnName="product_name"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Product Family" uniqueMembers="true" sourceAttribute="Product Family"/>
-      <Level name="Product Department" uniqueMembers="false" sourceAttribute="Product Department"/>
-      <Level name="Product Category" uniqueMembers="false" sourceAttribute="Product Category"/>
-      <Level name="Product Subcategory" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
-      <Level name="Brand Name" uniqueMembers="false" sourceAttribute="Brand Name"/>
-      <Level name="Product Name" uniqueMembers="true" sourceAttribute="Product Name"/>
+      <Level name="Product Family" approxRowCount="3" uniqueMembers="true" sourceAttribute="Product Family"/>
+      <Level name="Product Department" approxRowCount="23" uniqueMembers="false" sourceAttribute="Product Department"/>
+      <Level name="Product Category" approxRowCount="55" uniqueMembers="false" sourceAttribute="Product Category"/>
+      <Level name="Product Subcategory" approxRowCount="102" uniqueMembers="false" sourceAttribute="Product Subcategory"/>
+      <Level name="Brand Name" approxRowCount="512" uniqueMembers="false" sourceAttribute="Brand Name"/>
+      <Level name="Product Name" approxRowCount="1560" uniqueMembers="true" sourceAttribute="Product Name"/>
     </Hierarchy>
   </Dimension>
   <DimensionUsage name="Warehouse" source="Warehouse" foreignKey="warehouse_id"/>
@@ -570,7 +590,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="store_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
+      <Level name="Store Type" approxRowCount="6" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
@@ -583,7 +603,7 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="Boolean" columnName="coffee_bar"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Has coffee bar" uniqueMembers="true" sourceAttribute="Has coffee bar"/>
+      <Level name="Has coffee bar" approxRowCount="2" uniqueMembers="true" sourceAttribute="Has coffee bar"/>
     </Hierarchy>
   </Dimension>
 
@@ -600,39 +620,39 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     <DimensionAttribute name="Date" usage="Key" attributeHierarchyEnabled="false">
       <KeyColumn dataType="Date" columnName="the_date"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Year" levelType="TimeYears">
+    <DimensionAttribute name="Year" estimatedCount="2" levelType="TimeYears">
       <KeyColumn dataType="Numeric" columnName="the_year"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Quarter" levelType="TimeQuarters">
+    <DimensionAttribute name="Quarter" estimatedCount="4" levelType="TimeQuarters">
       <KeyColumn dataType="String" columnName="quarter"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Month" levelType="TimeMonths">
+    <DimensionAttribute name="Month" estimatedCount="12" levelType="TimeMonths">
       <KeyColumn dataType="Numeric" columnName="month_of_year"/>
       <NameColumn dataType="String" columnName="the_month"/>
     </DimensionAttribute>
     <Hierarchy hasAll="false">
-      <Level name="Year" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
-      <Level name="Quarter" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
+      <Level name="Year" approxRowCount="2" uniqueMembers="true" levelType="TimeYears" sourceAttribute="Year"/>
+      <Level name="Quarter" approxRowCount="8" uniqueMembers="false" levelType="TimeQuarters" sourceAttribute="Quarter"/>
       <!-- Use the_month as source for the name, so members look like
            [Time].[1997].[Q1].[Jan] rather than [Time].[1997].[Q1].[1]. -->
-      <Level name="Month" nameColumn="the_month" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
+      <Level name="Month" approxRowCount="24" nameColumn="the_month" uniqueMembers="false" levelType="TimeMonths" sourceAttribute="Month"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Store" foreignKey="employee_id" table="store_d">
-    <DimensionAttribute name="Store Key" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Key" estimatedCount="1155" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="employee_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Country">
+    <DimensionAttribute name="Store Country" estimatedCount="3">
       <KeyColumn dataType="String" columnName="store_country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store State">
+    <DimensionAttribute name="Store State" estimatedCount="10">
       <KeyColumn dataType="String" columnName="store_state"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store City">
+    <DimensionAttribute name="Store City" estimatedCount="24">
       <KeyColumn dataType="String" columnName="store_city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Name">
+    <DimensionAttribute name="Store Name" estimatedCount="25">
       <KeyColumn dataType="String" columnName="store_name"/>
     </DimensionAttribute>
     <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
@@ -660,10 +680,10 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="store_street_address"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Country" uniqueMembers="true" sourceAttribute="Store Country"/>
-      <Level name="Store State" uniqueMembers="true" sourceAttribute="Store State"/>
-      <Level name="Store City" uniqueMembers="false" sourceAttribute="Store City"/>
-      <Level name="Store Name" uniqueMembers="true" sourceAttribute="Store Name">
+      <Level name="Store Country" approxRowCount="3" uniqueMembers="true" sourceAttribute="Store Country"/>
+      <Level name="Store State" approxRowCount="10" uniqueMembers="true" sourceAttribute="Store State"/>
+      <Level name="Store City" approxRowCount="24" uniqueMembers="false" sourceAttribute="Store City"/>
+      <Level name="Store Name" approxRowCount="25" uniqueMembers="true" sourceAttribute="Store Name">
         <Property name="Store Type" sourceAttribute="Store Type"/>
         <Property name="Store Manager" sourceAttribute="Store Manager"/>
         <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
@@ -677,57 +697,57 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   </Dimension>
 
   <Dimension name="Pay Type" foreignKey="employee_id" table="employee_d">
-    <DimensionAttribute name="Employee Key" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Employee Key" estimatedCount="1155" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="employee_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Pay Type" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="pay_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Pay Type" uniqueMembers="true" sourceAttribute="Pay Type"/>
+      <Level name="Pay Type" approxRowCount="2" uniqueMembers="true" sourceAttribute="Pay Type"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Store Type" foreignKey="employee_id" table="store_d">
-    <DimensionAttribute name="Store Key" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Key" estimatedCount="1155" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="employee_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="store_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Type" uniqueMembers="true" sourceAttribute="Store Type"/>
+      <Level name="Store Type" approxRowCount="6" uniqueMembers="true" sourceAttribute="Store Type"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Position" foreignKey="employee_id" table="employee">
-    <DimensionAttribute name="Employee Key" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Employee Key" estimatedCount="1155" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="employee_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Management Role">
+    <DimensionAttribute name="Management Role" estimatedCount="5">
       <KeyColumn dataType="String" columnName="management_role"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Position Title">
+    <DimensionAttribute name="Position Title" estimatedCount="18">
       <KeyColumn dataType="String" columnName="position_title"/>
       <OrderByColumn dataType="Numeric" columnName="position_id"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Position">
-      <Level name="Management Role" uniqueMembers="true" sourceAttribute="Management Role"/>
-      <Level name="Position Title" uniqueMembers="false" sourceAttribute="Position Title"/>
+      <Level name="Management Role" approxRowCount="5" uniqueMembers="true" sourceAttribute="Management Role"/>
+      <Level name="Position Title" approxRowCount="18" uniqueMembers="false" sourceAttribute="Position Title"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Department" foreignKey="department_id" table="department">
-    <DimensionAttribute name="Department Description" usage="Key">
+    <DimensionAttribute name="Department Description" estimatedCount="12" usage="Key">
       <KeyColumn dataType="Numeric" columnName="department_id"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Department Description" uniqueMembers="true" sourceAttribute="Department Description"/>
+      <Level name="Department Description" approxRowCount="12" uniqueMembers="true" sourceAttribute="Department Description"/>
     </Hierarchy>
   </Dimension>
 
   <Dimension name="Employees" foreignKey="employee_id" table="employee">
-    <DimensionAttribute name="Employee Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Employee Id" estimatedCount="1155" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="employee_id"/>
       <NameColumn dataType="String" columnName="full_name"/>
       <ParentColumn dataType="Numeric" columnName="supervisor_id"/>
@@ -751,6 +771,10 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="management_role"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Employees">
+      <!-- No approxRowCount here on purpose. This level is parent-child, so its 1,155 members
+           sit at seven different depths; MDSCHEMA_LEVELS reports them SSAS-style as Level 01..07
+           (1, 7, 30, 24, 84, 505, 504). A count on the level would also become the All member's
+           CHILDREN_CARDINALITY, which is 1: the one employee with no supervisor. -->
       <Level name="Employee Id" uniqueMembers="true" nameColumn="full_name" nullParentValue="0" sourceAttribute="Employee Id">
         <Closure parentColumn="supervisor_id" childColumn="employee_id">
           <Table name="employee_closure"/>
@@ -780,19 +804,19 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     <AggExclude name="agg_lc_10_sales_fact_1997"/>
   </Table>
   <Dimension name="Store" foreignKey="store_id" table="store_ragged">
-    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Id" estimatedCount="25" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="store_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Country">
+    <DimensionAttribute name="Store Country" estimatedCount="5">
       <KeyColumn dataType="String" columnName="store_country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store State">
+    <DimensionAttribute name="Store State" estimatedCount="13">
       <KeyColumn dataType="String" columnName="store_state"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store City">
+    <DimensionAttribute name="Store City" estimatedCount="24">
       <KeyColumn dataType="String" columnName="store_city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Store Name">
+    <DimensionAttribute name="Store Name" estimatedCount="25">
       <KeyColumn dataType="String" columnName="store_name"/>
     </DimensionAttribute>
     <DimensionAttribute name="Store Type" attributeHierarchyEnabled="false">
@@ -820,10 +844,10 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="store_street_address"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Store Country" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Country"/>
-      <Level name="Store State" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="Store State"/>
-      <Level name="Store City" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="Store City"/>
-      <Level name="Store Name" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Name">
+      <Level name="Store Country" approxRowCount="5" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Country"/>
+      <Level name="Store State" approxRowCount="13" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="Store State"/>
+      <Level name="Store City" approxRowCount="24" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="Store City"/>
+      <Level name="Store Name" approxRowCount="25" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Store Name">
         <Property name="Store Type" sourceAttribute="Store Type"/>
         <Property name="Store Manager" sourceAttribute="Store Manager"/>
         <Property name="Store Sqft" sourceAttribute="Store Sqft"/>
@@ -837,22 +861,22 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   </Dimension>
 
   <Dimension name="Geography" foreignKey="store_id" table="store_ragged">
-    <DimensionAttribute name="Store Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Store Id" estimatedCount="25" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Integer" columnName="store_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Country">
+    <DimensionAttribute name="Country" estimatedCount="5">
       <KeyColumn dataType="String" columnName="store_country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="State">
+    <DimensionAttribute name="State" estimatedCount="13">
       <KeyColumn dataType="String" columnName="store_state"/>
     </DimensionAttribute>
-    <DimensionAttribute name="City">
+    <DimensionAttribute name="City" estimatedCount="24">
       <KeyColumn dataType="String" columnName="store_city"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Country" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Country"/>
-      <Level name="State" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="State"/>
-      <Level name="City" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="City"/>
+      <Level name="Country" approxRowCount="5" uniqueMembers="true" hideMemberIf="Never" sourceAttribute="Country"/>
+      <Level name="State" approxRowCount="13" uniqueMembers="true" hideMemberIf="IfParentsName" sourceAttribute="State"/>
+      <Level name="City" approxRowCount="24" uniqueMembers="false" hideMemberIf="IfBlankName" sourceAttribute="City"/>
     </Hierarchy>
   </Dimension>
 
@@ -861,41 +885,41 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <DimensionUsage name="Time" source="Time" foreignKey="time_id"/>
   <DimensionUsage name="Product" source="Product" foreignKey="product_id"/>
   <Dimension name="Promotion Media" foreignKey="promotion_id" table="promotion">
-    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Promotion Id" estimatedCount="1864" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="promotion_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Media Type">
+    <DimensionAttribute name="Media Type" estimatedCount="14">
       <KeyColumn dataType="String" columnName="media_type"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Media">
-      <Level name="Media Type" uniqueMembers="true" sourceAttribute="Media Type"/>
+      <Level name="Media Type" approxRowCount="14" uniqueMembers="true" sourceAttribute="Media Type"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Promotions" foreignKey="promotion_id" table="promotion">
-    <DimensionAttribute name="Promotion Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Promotion Id" estimatedCount="1864" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="promotion_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Promotion Name">
+    <DimensionAttribute name="Promotion Name" estimatedCount="51">
       <KeyColumn dataType="String" columnName="promotion_name"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Promotions">
-      <Level name="Promotion Name" uniqueMembers="true" sourceAttribute="Promotion Name"/>
+      <Level name="Promotion Name" approxRowCount="51" uniqueMembers="true" sourceAttribute="Promotion Name"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Customers" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Country">
+    <DimensionAttribute name="Country" estimatedCount="3">
       <KeyColumn dataType="String" columnName="country"/>
     </DimensionAttribute>
-    <DimensionAttribute name="State Province">
+    <DimensionAttribute name="State Province" estimatedCount="13">
       <KeyColumn dataType="String" columnName="state_province"/>
     </DimensionAttribute>
-    <DimensionAttribute name="City">
+    <DimensionAttribute name="City" estimatedCount="108">
       <KeyColumn dataType="String" columnName="city"/>
     </DimensionAttribute>
-    <DimensionAttribute name="Name">
+    <DimensionAttribute name="Name" estimatedCount="10181">
       <KeyColumn dataType="String" columnName="fullname"/>
     </DimensionAttribute>
     <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
@@ -911,10 +935,10 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
       <KeyColumn dataType="String" columnName="yearly_income"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Customers">
-      <Level name="Country" uniqueMembers="true" sourceAttribute="Country"/>
-      <Level name="State Province" uniqueMembers="true" sourceAttribute="State Province"/>
-      <Level name="City" uniqueMembers="false" sourceAttribute="City"/>
-      <Level name="Name" uniqueMembers="true" sourceAttribute="Name">
+      <Level name="Country" approxRowCount="3" uniqueMembers="true" sourceAttribute="Country"/>
+      <Level name="State Province" approxRowCount="13" uniqueMembers="true" sourceAttribute="State Province"/>
+      <Level name="City" approxRowCount="109" uniqueMembers="false" sourceAttribute="City"/>
+      <Level name="Name" approxRowCount="10181" uniqueMembers="true" sourceAttribute="Name">
         <Property name="Gender" sourceAttribute="Gender"/>
         <Property name="Marital Status" sourceAttribute="Marital Status"/>
         <Property name="Education" sourceAttribute="Education"/>
@@ -923,47 +947,47 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     </Hierarchy>
   </Dimension>
   <Dimension name="Education Level" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Education Level" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="education"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Education Level" uniqueMembers="true" sourceAttribute="Education Level"/>
+      <Level name="Education Level" approxRowCount="5" uniqueMembers="true" sourceAttribute="Education Level"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Gender" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Gender" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="gender"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Gender">
-      <Level name="Gender" uniqueMembers="true" sourceAttribute="Gender"/>
+      <Level name="Gender" approxRowCount="2" uniqueMembers="true" sourceAttribute="Gender"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Marital Status" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Marital Status" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="marital_status"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Marital Status">
-      <Level name="Marital Status" uniqueMembers="true" sourceAttribute="Marital Status"/>
+      <Level name="Marital Status" approxRowCount="2" uniqueMembers="true" sourceAttribute="Marital Status"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Yearly Income" foreignKey="customer_id" table="customer">
-    <DimensionAttribute name="Customer Id" usage="Key" attributeHierarchyVisible="false">
+    <DimensionAttribute name="Customer Id" estimatedCount="10281" usage="Key" attributeHierarchyVisible="false">
       <KeyColumn dataType="Numeric" columnName="customer_id"/>
     </DimensionAttribute>
     <DimensionAttribute name="Yearly Income" attributeHierarchyEnabled="false">
       <KeyColumn dataType="String" columnName="yearly_income"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true">
-      <Level name="Yearly Income" uniqueMembers="true" sourceAttribute="Yearly Income"/>
+      <Level name="Yearly Income" approxRowCount="8" uniqueMembers="true" sourceAttribute="Yearly Income"/>
     </Hierarchy>
   </Dimension>
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard"/>
