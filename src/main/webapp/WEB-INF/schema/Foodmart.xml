@@ -409,7 +409,7 @@ left join "position" on "employee"."position_id" = "position"."position_id"
       <KeyColumn dataType="String" columnName="marital_status"/>
     </DimensionAttribute>
     <Hierarchy hasAll="true" allMemberName="All Marital Status">
-      <Level name="Marital Status" uniqueMembers="true" approxRowCount="111" sourceAttribute="Marital Status"/>
+      <Level name="Marital Status" uniqueMembers="true" approxRowCount="2" sourceAttribute="Marital Status"/>
     </Hierarchy>
   </Dimension>
   <Dimension name="Yearly Income" foreignKey="customer_id" table="customer">
