@@ -427,8 +427,8 @@ left join "position" on "employee"."position_id" = "position"."position_id"
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard" displayFolder=""/>
   <Measure name="Store Cost" column="store_cost" aggregator="sum" formatString="#,###.00" displayFolder="Store"/>
   <Measure name="Store Sales" column="store_sales" aggregator="sum" formatString="#,###.00" displayFolder="Store"/>
-  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,###"/>
-  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,###"/>
+  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,##0"/>
+  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,##0"/>
   <Measure name="Promotion Sales" aggregator="sum" formatString="#,###.00">
     <MeasureExpression>
       <SQL dialect="access">
@@ -607,8 +607,8 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
     </Hierarchy>
   </Dimension>
 
-  <Measure name="Store Sqft" column="store_sqft" aggregator="sum" formatString="#,###"/>
-  <Measure name="Grocery Sqft" column="grocery_sqft" aggregator="sum" formatString="#,###"/>
+  <Measure name="Store Sqft" column="store_sqft" aggregator="sum" formatString="#,##0"/>
+  <Measure name="Grocery Sqft" column="grocery_sqft" aggregator="sum" formatString="#,##0"/>
 
 </Cube>
 
@@ -993,8 +993,8 @@ Iif("sales_fact_1997"."promotion_id" = 0, 0, "sales_fact_1997"."store_sales")
   <Measure name="Unit Sales" column="unit_sales" aggregator="sum" formatString="Standard"/>
   <Measure name="Store Cost" column="store_cost" aggregator="sum" formatString="#,###.00"/>
   <Measure name="Store Sales" column="store_sales" aggregator="sum" formatString="#,###.00"/>
-  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,###"/>
-  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,###"/>
+  <Measure name="Sales Count" column="product_id" aggregator="count" formatString="#,##0"/>
+  <Measure name="Customer Count" column="customer_id" aggregator="distinct-count" formatString="#,##0"/>
 </Cube>
 
 <VirtualCube name="Warehouse and Sales" defaultMeasure="Store Sales">
