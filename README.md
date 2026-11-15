@@ -5,7 +5,7 @@
 > - What's new: **[Power BI and AI agents on your own semantic model](https://dev.to/sergeisemenkov/the-new-emondrian-power-bi-and-ai-agents-on-your-own-semantic-model-4nap)**
 > - eMondrian is developed and supported by **[BIS — Business Intelligence Solutions](https://bisolutions.dev)** · contact@bisolutions.dev
 >
-> This repository builds the eMondrian server: the Docker image [`emondrian/emondrian`](https://hub.docker.com/r/emondrian/emondrian) that eMondrian Community runs. The `.war` download and the instructions below describe the earlier way to deploy eMondrian into your own servlet container; the `.war` is no longer updated.
+> This repository builds the eMondrian server web application and its Docker image [`emondrian/emondrian`](https://hub.docker.com/r/emondrian/emondrian), which eMondrian Community runs together with the eMondrian modules. The `.war` download and the instructions below describe the earlier way to deploy eMondrian into your own servlet container; the `.war` is no longer updated.
 
 ---
 
