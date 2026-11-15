@@ -8,10 +8,10 @@
             Hi there! My name is Sergei Semenkov
           </h2>
           <p>
-            I'm a freelance consultant and the developer of the eMondrian.
+            I'm the founder of BIS (Business Intelligence Solutions), the team that develops eMondrian.
           </p>
           <p>
-            I have two decades experience in developing open source and Microsoft based OLAP solutions.
+            I have 25 years of experience in developing open source and Microsoft based OLAP solutions.
           </p>
           <p class="links">
             <a href="https://www.linkedin.com/in/sergei-semenkov-129943103/">
