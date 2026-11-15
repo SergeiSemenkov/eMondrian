@@ -23,6 +23,13 @@ public class ForwardedAuthenticationXmlaRequestCallback implements XmlaRequestCa
             HttpServletResponse response,
             Map<String, Object> context) {
 
+        // Believed only on a request carrying the authentication gateway's secret
+        // (ServerPermissions.trustsForwardedHeaders): one that reached this server around the
+        // gateway is anonymous here, and refused earlier by ForwardedHeadersFilter when it
+        // names a caller.
+        if (!mondrian.server.ServerPermissions.trustsForwardedHeaders(request)) {
+            return true;
+        }
         context.put(
                 mondrian.xmla.XmlaConstants.CONTEXT_XMLA_AUTHENTICATED_USER,
                 request.getHeader("X-Forwarded-User"));
