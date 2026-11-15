@@ -1,12 +1,11 @@
-> **eMondrian has moved.** The new version works with Excel, Power BI and AI agents (MCP) and runs with Docker in minutes.
+> **To run eMondrian, use [eMondrian Community](https://github.com/eMondrian/emondrian-community).** It works with Excel, Power BI and AI agents (MCP), runs with Docker in minutes, and includes sign-in with Keycloak, Active Directory or LDAP.
 >
 > - Website: **[emondrian.com](https://emondrian.com)**
-> - Source code: **[github.com/eMondrian/emondrian-community](https://github.com/eMondrian/emondrian-community)**
 > - Documentation: **[docs.emondrian.com](https://docs.emondrian.com)**
 > - What's new: **[Power BI and AI agents on your own semantic model](https://dev.to/sergeisemenkov/the-new-emondrian-power-bi-and-ai-agents-on-your-own-semantic-model-4nap)**
-> - Consulting and support: **[BIS](https://bisolutions.dev)** · contact@bisolutions.dev
+> - eMondrian is developed and supported by **[BIS — Business Intelligence Solutions](https://bisolutions.dev)** · contact@bisolutions.dev
 >
-> This repository contains an older version and is no longer actively developed.
+> This repository builds the eMondrian server: the Docker image [`emondrian/emondrian`](https://hub.docker.com/r/emondrian/emondrian) that eMondrian Community runs. The `.war` download and the instructions below describe the earlier way to deploy eMondrian into your own servlet container; the `.war` is no longer updated.
 
 ---
 
